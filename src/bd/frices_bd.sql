@@ -4,12 +4,12 @@
 -- =========================================================
 
 -- 1) Crear base de datos (si no existe)
-CREATE DATABASE IF NOT EXISTS `frices_db`
+CREATE DATABASE IF NOT EXISTS `AccesoriosFrices`
   DEFAULT CHARACTER SET utf8mb4
   COLLATE utf8mb4_general_ci;
 
 -- 2) Usar la base
-USE `frices_db`;
+USE `AccesoriosFrices`;
 
 -- 3) Crear tabla clientes (si no existe)
 CREATE TABLE IF NOT EXISTS `clientes` (
@@ -98,3 +98,4 @@ CREATE TABLE IF NOT EXISTS imagenes_producto (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
+
