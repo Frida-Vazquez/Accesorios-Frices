@@ -1,0 +1,136 @@
+/* Fondo elegante */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(140deg, #f7ead1 0%, #e9d9b7 40%, #fff7ea 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Logo */
+.logo-frices {
+    width: 170px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.7s ease;
+}
+
+/* Contenedor principal */
+.auth-wrapper {
+    text-align: center;
+}
+
+/* Tarjeta */
+.auth-card {
+    background: #ffffff;
+    width: 380px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.15);
+    padding: 25px 30px 30px;
+    box-sizing: border-box;
+    animation: fadeIn 0.7s ease;
+}
+
+/* Tabs */
+.auth-tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 0;
+    font-size: 15px;
+    cursor: pointer;
+    color: #777;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+}
+
+.tab.active {
+    color: #C89A3D; /* DORADO MARCA */
+    border-bottom: 2px solid #C89A3D;
+    font-weight: bold;
+}
+
+/* Títulos */
+.auth-title {
+    text-align: left;
+    font-size: 20px;
+    margin: 5px 0 15px;
+    color: #5c4b2a;
+}
+
+/* Form panels */
+.form-panel {
+    display: none;
+}
+.form-panel.active {
+    display: block;
+}
+
+/* Inputs */
+.auth-input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #d9d4c8;
+    background: #faf8f3;
+    font-size: 15px;
+    color: #3d2f17;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: #C89A3D;
+    box-shadow: 0 0 4px rgba(200, 154, 61, 0.4);
+}
+
+/* Botón dorado */
+.auth-button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px 0;
+    border-radius: 25px;
+    border: none;
+    background: #C89A3D;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.auth-button:hover {
+    background: #A0782F;
+}
+
+/* Mensajes */
+.auth-msg {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #6d5630;
+}
+
+/* Link olvidaste contraseña */
+.link-button {
+    margin-top: 10px;
+    background: transparent;
+    border: none;
+    color: #A0782F;
+    font-size: 13px;
+    cursor: pointer;
+}
+.link-button:hover {
+    color: #6a4f28;
+}
+
+/* Animación */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Accesorios Frices - Registro y Login</title>
+    <link rel="stylesheet" href="styles.css"> </head>
+<body>
+
+<div class="main-container">
+    <div class="form-container">
+        
+        <div id="login-form" class="form-card active">
+            <h2 class="title-dorado">Accesorios Frices</h2>
+            <h3 class="subtitle">Iniciar Sesión</h3>
+
+            <input id="log-email" placeholder="Correo Electrónico" type="email" />
+            <input id="log-pass" placeholder="Contraseña" type="password" />
+
+            <button onclick="login()" class="btn-negro">Entrar</button>
+            <div id="msg-login" class="msg msg-blanco"></div>
+
+            <p class="switch-text">¿No tienes cuenta? <a href="#" onclick="toggleForm('register')" class="switch-link">Regístrate aquí</a></p>
+        </div>
+
+        <div id="register-form" class="form-card">
+            <h2 class="title-dorado">Accesorios Frices</h2>
+            <h3 class="subtitle">Crear Cuenta</h3>
+
+            <input id="reg-nombre" placeholder="Nombre Completo" />
+            <input id="reg-email" placeholder="Correo Electrónico" type="email" />
+            <input id="reg-pass" placeholder="Contraseña" type="password" />
+
+            <button onclick="registrar()" class="btn-negro">Registrarse</button>
+            <div id="msg-registro" class="msg msg-blanco"></div>
+
+            <p class="switch-text">¿Ya tienes cuenta? <a href="#" onclick="toggleForm('login')" class="switch-link">Inicia Sesión</a></p>
+        </div>
+        
+    </div>
+    
+    <div id="token-box" class="token-box" style="display:none;"></div>
+</div>
+
+
+<script>
+    const API_URL = "http://localhost:3000/api";
+
+    // Función para alternar entre formularios
+    function toggleForm(target) {
+        document.getElementById('login-form').classList.remove('active');
+        document.getElementById('register-form').classList.remove('active');
+        document.getElementById('msg-login').innerText = ''; // Limpiar mensajes
+        document.getElementById('msg-registro').innerText = ''; // Limpiar mensajes
+
+        document.getElementById(target + '-form').classList.add('active');
+    }
+
+    // ===============================
+    // REGISTRO (nombre, email, password)
+    // ===============================
+    async function registrar() {
+        const nombre = document.getElementById("reg-nombre").value;
+        const email = document.getElementById("reg-email").value;
+        const pass = document.getElementById("reg-pass").value;
+
+        const res = await fetch(`${API_URL}/clientes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                nombre: nombre,
+                email: email,
+                password: pass
+            })
+        });
+
+        const data = await res.json();
+
+        document.getElementById("msg-registro").innerText =
+            res.ok ? "Registro exitoso 🎉. ¡Ya puedes iniciar sesión!" : (data.message || "Error al registrar");
+            
+        if (res.ok) {
+            // Opcional: Si el registro es exitoso, puedes llevarlo directamente al login
+            // setTimeout(() => toggleForm('login'), 2000); 
+        }
+    }
+
+    // ===============================
+    // LOGIN (email, password)
+    // ===============================
+    async function login() {
+        const email = document.getElementById("log-email").value;
+        const pass = document.getElementById("log-pass").value;
+        
+        // Limpia el token anterior y la caja de token
+        localStorage.removeItem("token");
+        document.getElementById("token-box").style.display = "none";
+
+        const res = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: email,
+                password: pass
+            })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            document.getElementById("msg-login").innerText = "Login correcto ✔. ¡Bienvenido!";
+            localStorage.setItem("token", data.token);
+
+            document.getElementById("token-box").style.display = "block";
+            document.getElementById("token-box").innerHTML = `**TOKEN DE ACCESO:** <br>${data.token}`;
+            
+        } else {
+            document.getElementById("msg-login").innerText =
+                data.message || "Error en login (Credenciales incorrectas)";
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+/* Paleta de colores */
+:root {
+    --color-negro: #1a1a1a;
+    --color-dorado: #FFD700; /* Dorado Estándar */
+    --color-blanco: #ffffff;
+    --color-gris-claro: #f0f0f0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--color-gris-claro);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para el contenedor principal */
+}
+
+/* Contenedor Único y Elegante */
+.form-container {
+    width: 100%;
+    background: var(--color-negro);
+    color: var(--color-blanco);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Sombra más oscura */
+    position: relative;
+    overflow: hidden; /* Oculta los formularios que no están activos */
+    min-height: 450px; /* Altura fija para evitar saltos */
+    margin-bottom: 20px;
+}
+
+/* Estilos de los Formularios (para la transición) */
+.form-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.form-card.active {
+    opacity: 1;
+    pointer-events: auto;
+    position: static; /* Opcional: si quieres un flujo normal cuando está activo */
+}
+
+/* Títulos y Subtítulos */
+.title-dorado {
+    text-align: center;
+    color: var(--color-dorado);
+    margin-bottom: 5px;
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.2em;
+    font-weight: 300;
+}
+
+/* Campos de entrada */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #333; /* Fondo del input más oscuro */
+    color: var(--color-blanco);
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+input:focus {
+    border-color: var(--color-dorado);
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Botón (Negro con texto Blanco/Dorado al pasar el mouse) */
+.btn-negro {
+    width: 100%;
+    background: var(--color-dorado);
+    color: var(--color-negro);
+    padding: 12px;
+    border: none;
+    margin-top: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+}
+
+.btn-negro:hover {
+    background: #e6c200; /* Tono de dorado ligeramente diferente */
+}
+
+/* Mensajes de feedback */
+.msg {
+    margin-top: 15px;
+    font-size: 0.95em;
+    text-align: center;
+    font-weight: 500;
+}
+
+.msg-blanco {
+    color: var(--color-blanco);
+}
+
+/* Enlace para cambiar de formulario */
+.switch-text {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #ccc;
+}
+
+.switch-link {
+    color: var(--color-dorado);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.switch-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Caja del Token */
+.token-box {
+    width: 100%;
+    background: var(--color-dorado);
+    color: var(--color-negro);
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    word-break: break-all;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
