@@ -1,0 +1,70 @@
+import express from "express";
+import "dotenv/config";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import routes from "./routes/index.js";
+import { notFound } from "./middlewares/notFound.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
+
+import { homePage } from "./frontend/pages/home.js";
+import { loginPage } from "./frontend/pages/login.js";
+import { registerPage } from "./frontend/pages/register.js";
+
+const app = express();
+
+// ======================================
+// Resolver __dirname (ES Modules)
+// ======================================
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+console.log(" __dirname detectado:", __dirname);
+
+// ======================================
+// Ruta correcta a /public
+// __dirname = C:\AccesoriosFrices\AccesoriosFrices\src
+// publicPath = C:\AccesoriosFrices\AccesoriosFrices\public
+// ======================================
+const publicPath = path.resolve(__dirname, "../public");
+console.log(" Public path cargado:", publicPath);
+
+// ======================================
+// Servir archivos estáticos de /public
+// ======================================
+app.use("/static", express.static(publicPath));
+
+// ======================================
+// Rutas principales de la API
+// ======================================
+app.use("/api", routes);
+
+// ======================================
+// GET / -> index.html
+// ======================================
+app.get("/", (_req, res) => {
+  res.send(homePage());
+});
+
+app.get("/login", (_req, res) => {
+  res.send(loginPage());
+});
+
+app.get("/registro", (_req, res) => {
+  res.send(registerPage());
+});
+
+// ======================================
+// Health de la API
+// ======================================
+app.get("/api/frices", (_req, res) => {
+  res.json({ ok: true, msg: "API viva" });
+});
+
+// ======================================
+// 404 y errores
+// ======================================
+app.use(notFound);
+app.use(errorHandler);
+
+export default app

@@ -7,9 +7,9 @@ import routes from "./routes/index.js";
 import { notFound } from "./middlewares/notFound.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
-import { homePage } from "./frontend/pages/home.js";
-import { loginPage } from "./frontend/pages/login.js";
-import { registerPage } from "./frontend/pages/register.js";
+import { homePage } from "./frontend/pages/home/home.js";
+import { loginPage } from "./frontend/pages/login/login.js";
+import { registerPage } from "./frontend/pages/login/register.js";
 
 const app = express();
 
