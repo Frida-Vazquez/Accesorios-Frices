@@ -206,3 +206,23 @@ CREATE TABLE `productos` (
   COLLATE=utf8mb4_general_ci;
 
 
+-- Comprobación rápida
+SELECT * FROM clientes;
+SELECT * FROM roles;
+SELECT * FROM categorias;
+SHOW TABLES;
+
+
+SELECT id, nombre, email
+FROM clientes;
+
+INSERT INTO clientes (nombre, email, password_hash, telefono, activo)
+VALUES (
+  'Rocco Vazquez',
+  'Rocco@gmail.com',
+  '$2b$10$uxN3uzuoAwWGEGjcDyR4h..JaW0iopIO2FZ19G8CtSzoqh2NmWUYW', -- password 12345678
+  NULL,
+  1
+);
+
+SELECT id, nombre, email FROM clientes;
