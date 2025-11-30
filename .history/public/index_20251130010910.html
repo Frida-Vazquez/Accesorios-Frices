@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Accesorios Frices - Auth</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+<div class="auth-wrapper">
+
+  <!-- LOGO -->
+  <img src="/logo.png" class="logo-frices" alt="Accesorios Frices">
+
+  <!-- MENSAJE GLOBAL -->
+  <div id="message" class="auth-msg-global"></div>
+
+  <!-- TARJETA LOGIN / REGISTER -->
+  <div id="auth-card" class="auth-card">
+    <div class="auth-tabs">
+      <button id="tab-login" class="tab active" onclick="showLogin()">Login</button>
+      <button id="tab-register" class="tab" onclick="showRegister()">Register</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-form" class="form-panel active">
+      <h2 class="auth-title">Iniciar Sesión</h2>
+
+      <input id="log-email" class="auth-input" placeholder="Correo" type="email" />
+      <input id="log-pass" class="auth-input" placeholder="Contraseña" type="password" />
+
+      <button class="auth-button" onclick="login()">Login</button>
+      <div id="msg-login" class="auth-msg"></div>
+
+      <button class="link-button" type="button">¿Olvidaste tu contraseña?</button>
+
+      <p class="switch">
+        ¿Aún no tienes cuenta?
+        <button type="button" class="link-button" onclick="showRegister()">Crear cuenta</button>
+      </p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register-form" class="form-panel">
+      <h2 class="auth-title">Crear Cuenta</h2>
+
+      <input id="reg-nombre" class="auth-input" placeholder="Nombre completo" />
+      <input id="reg-email" class="auth-input" placeholder="Correo" type="email" />
+      <input id="reg-pass" class="auth-input" placeholder="Contraseña" type="password" />
+
+      <button class="auth-button" onclick="registrar()">Registrarse</button>
+      <div id="msg-registro" class="auth-msg"></div>
+
+      <p class="switch">
+        ¿Ya tienes una cuenta?
+        <button type="button" class="link-button" onclick="showLogin()">Iniciar sesión</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- SECCIÓN BIENVENIDA -->
+  <div id="welcomeSection" class="auth-card card-welcome" style="display:none;">
+    <div class="welcome-icon">💍</div>
+    <h2 class="welcome-title">Bienvenida a Accesorios Frices</h2>
+    <p id="welcomeText" class="welcome-text"></p>
+    <p class="welcome-subtext">
+      Tu sesión se ha iniciado correctamente.  
+      Próximamente podrás ver tus pedidos, direcciones y favoritos desde aquí.
+    </p>
+    <button id="logoutBtn" class="auth-button secondary">Cerrar sesión</button>
+  </div>
+
+</div>
+
+<script>
+  const API_URL = "http://localhost:3000/api";
+  const $ = (id) => document.getElementById(id);
+
+  function clearMessages() {
+    $("message").innerText = "";
+    $("msg-login").innerText = "";
+    $("msg-registro").innerText = "";
+  }
+
+  function showLogin() {
+    clearMessages();
+    $("login-form").classList.add("active");
+    $("register-form").classList.remove("active");
+    $("tab-login").classList.add("active");
+    $("tab-register").classList.remove("active");
+  }
+
+  function showRegister() {
+    clearMessages();
+    $("login-form").classList.remove("active");
+    $("register-form").classList.add("active");
+    $("tab-login").classList.remove("active");
+    $("tab-register").classList.add("active");
+  }
+
+  // ===== VALIDACIONES FRONTEND =====
+  function validarEmail(correo) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+  }
+
+  // ============ REGISTRO ============
+  async function registrar() {
+    clearMessages();
+
+    const nombre = $("reg-nombre").value.trim();
+    const email  = $("reg-email").value.trim();
+    const pass   = $("reg-pass").value.trim();
+
+    // ===== Validaciones =====
+    if (!nombre || !email || !pass) {
+      $("msg-registro").innerText = "⚠️ Completa todos los campos.";
+      return;
+    }
+
+    if (!validarEmail(email)) {
+      $("msg-registro").innerText = "⚠️ El correo no es válido.";
+      return;
+    }
+
+    if (pass.length < 8) {
+      $("msg-registro").innerText = "⚠️ La contraseña debe tener mínimo 8 caracteres.";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre, email, password: pass }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // ===== Mensajes del backend =====
+        if (data.message?.includes("registrado")) {
+          $("msg-registro").innerText = "⚠️ Este correo ya está registrado. Intenta iniciar sesión.";
+        } else {
+          $("msg-registro").innerText = data.message || "⚠️ Error al registrar.";
+        }
+        return;
+      }
+
+      // ===== Registro exitoso =====
+      $("msg-registro").innerText = "🎉 Registro exitoso. Ahora inicia sesión.";
+      showLogin();
+      $("log-email").value = email;
+
+    } catch (err) {
+      console.error(err);
+      $("message").innerText = "❌ Error de red al registrar.";
+    }
+  }
+
+  // ============ LOGIN ============
+  async function login() {
+    clearMessages();
+
+    const email = $("log-email").value.trim();
+    const pass  = $("log-pass").value.trim();
+
+    // ===== Validaciones =====
+    if (!email || !pass) {
+      $("msg-login").innerText = "⚠️ Ingresa correo y contraseña.";
+      return;
+    }
+
+    if (!validarEmail(email)) {
+      $("msg-login").innerText = "⚠️ El correo no es válido.";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: pass }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // ===== Errores del backend
+        if (data.message?.includes("Credenciales")) {
+          $("msg-login").innerText = "❌ Correo o contraseña incorrectos.";
+        } else {
+          $("msg-login").innerText = data.message || "❌ Error al iniciar sesión.";
+        }
+        return;
+      }
+
+      // ===== Login exitoso =====
+      if (data.token) {
+        localStorage.setItem("frices_token", data.token);
+      }
+
+      // 🔥 SI TIENE ROL ADMIN -> PANEL ADMIN
+      // aseguramos que roles sea un arreglo
+      const roles = Array.isArray(data.user?.roles) ? data.user.roles : [];
+      if (roles.includes("ADMIN")) {
+        window.location.href = "/admin.html";
+        return;
+      }
+
+      // 👇 Si NO es admin, se queda en la bienvenida normal
+      const userName = data.user?.nombre || email;
+      $("welcomeText").innerText =
+        `Hola, ${userName}. Gracias por confiar en Accesorios Frices.`;
+
+      $("auth-card").style.display = "none";
+      $("welcomeSection").style.display = "block";
+
+    } catch (err) {
+      console.error(err);
+      $("message").innerText = "❌ Error de red al iniciar sesión.";
+    }
+  }
+
+  // ============ LOGOUT ============
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("frices_token");
+      $("welcomeSection").style.display = "none";
+      $("auth-card").style.display = "block";
+      showLogin();
+    });
+  }
+
+</script>
+
+</body>
+</html>
