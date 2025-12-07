@@ -1,0 +1,62 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- NAVBAR -->
+  <header class="bg-[#8a555b] text-white">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <h1 class="font-semibold text-lg">Panel de administración</h1>
+      <div class="flex items-center gap-3">
+        <span id="adminNombre" class="text-sm">Hola, Admin</span>
+        <button id="btnLogout" class="text-sm border border-white/60 px-3 py-1 rounded-lg hover:bg-white hover:text-[#8a555b]">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <h2 class="text-2xl font-semibold mb-6">Panel general</h2>
+
+    <div id="adminMessage" class="mb-4 text-sm"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Tarjeta Categorías -->
+      <a href="/admin/categorias" class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold mb-2">Categorías</h3>
+        <p class="text-sm text-gray-600">
+          Crear, editar y eliminar categorías de productos.
+        </p>
+      </a>
+
+      <!-- Tarjeta Productos -->
+      <a href="/admin/productos" class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold mb-2">Productos</h3>
+        <p class="text-sm text-gray-600">
+          Administrar el catálogo de productos de la tienda.
+        </p>
+      </a>
+
+      <!-- Tarjeta Clientes -->
+      <a href="/admin/clientes" class="bg-white rounded-2xl shadow p-6 hover:shadow-lg transition">
+        <h3 class="text-lg font-semibold mb-2">Clientes</h3>
+        <p class="text-sm text-gray-600">
+          Consultar y gestionar registros de clientes.
+        </p>
+      </a>
+    </div>
+  </main>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

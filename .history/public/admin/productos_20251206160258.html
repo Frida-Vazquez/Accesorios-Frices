@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Productos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- NAVBAR -->
+  <header class="bg-[#8a555b] text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="/admin" class="underline text-sm">← Volver</a>
+      <h1 class="text-lg font-semibold">Productos</h1>
+      <button id="btnLogout" class="px-3 py-1 border rounded-lg">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+    <div id="adminMessage" class="text-sm"></div>
+
+    <!-- FORMULARIO -->
+    <section class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="font-semibold mb-3">Agregar / Editar producto</h2>
+
+      <form id="productoForm" class="grid gap-4 md:grid-cols-4 items-end">
+        <input type="hidden" id="prodId" />
+
+        <!-- Nombre -->
+        <div>
+          <label class="text-sm">Nombre</label>
+          <input id="prodNombre" class="w-full border rounded-xl px-3 py-2 text-sm" required />
+        </div>
+
+        <!-- Descripción -->
+        <div class="md:col-span-2">
+          <label class="text-sm">Descripción</label>
+          <input id="prodDescripcion" class="w-full border rounded-xl px-3 py-2 text-sm" />
+        </div>
+
+        <!-- Precio -->
+        <div>
+          <label class="text-sm">Precio (MXN)</label>
+          <input id="prodPrecio" type="number" step="0.01" min="0" class="w-full border rounded-xl px-3 py-2 text-sm" required />
+        </div>
+
+        <!-- Categoría -->
+        <div>
+          <label class="text-sm">Categoría</label>
+          <select id="prodCategoria" class="w-full border rounded-xl px-3 py-2 text-sm" required>
+            <option value="">Selecciona una categoría</option>
+          </select>
+        </div>
+
+        <!-- Stock -->
+        <div>
+          <label class="text-sm">Stock</label>
+          <input id="prodStock" type="number" min="0" class="w-full border rounded-xl px-3 py-2 text-sm" />
+        </div>
+
+        <!-- Tipo de pieza -->
+        <div>
+          <label class="text-sm">Tipo de pieza</label>
+          <input id="prodTipoPieza" class="w-full border rounded-xl px-3 py-2 text-sm" placeholder="ARETES, CADENA, PULSERA..." />
+        </div>
+
+        <!-- Material -->
+        <div>
+          <label class="text-sm">Material</label>
+          <input id="prodMaterial" class="w-full border rounded-xl px-3 py-2 text-sm" placeholder="Acero inoxidable, oro laminado..." />
+        </div>
+
+        <!-- Color principal -->
+        <div>
+          <label class="text-sm">Color principal</label>
+          <input id="prodColor" class="w-full border rounded-xl px-3 py-2 text-sm" placeholder="Dorado, plateado, rosa..." />
+        </div>
+
+        <!-- Largo -->
+        <div>
+          <label class="text-sm">Largo (cm)</label>
+          <input id="prodLargo" type="number" step="0.1" min="0" class="w-full border rounded-xl px-3 py-2 text-sm" />
+        </div>
+
+        <!-- Imagen -->
+        <div class="md:col-span-2">
+          <label class="text-sm">Imagen del producto</label>
+          <input
+            id="prodImagen"
+            name="imagen"
+            type="file"
+            accept="image/*"
+            class="w-full border rounded-xl px-3 py-2 text-sm"
+          />
+        </div>
+
+        <!-- Checks -->
+        <div class="md:col-span-2 flex flex-wrap gap-4 items-center">
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="prodDestacado" type="checkbox" class="w-4 h-4" />
+            Destacado
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="prodHipo" type="checkbox" class="w-4 h-4" />
+            Hipoalergénico
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="prodAjustable" type="checkbox" class="w-4 h-4" />
+            Ajustable
+          </label>
+          <label class="inline-flex items-center gap-2 text-sm">
+            <input id="prodActivo" type="checkbox" class="w-4 h-4" checked />
+            Activo
+          </label>
+        </div>
+
+        <!-- Botones -->
+        <div class="md:col-span-4 flex gap-2 justify-end">
+          <button class="px-4 py-2 rounded-xl bg-[#8a555b] text-white text-sm">
+            Guardar
+          </button>
+          <button id="btnResetForm" type="button" class="px-4 py-2 rounded-xl border text-sm">
+            Limpiar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- TABLA -->
+    <section class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="font-semibold mb-3">Listado de productos</h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="border-b">
+            <tr>
+              <th class="py-2 text-left">ID</th>
+              <th class="py-2 text-left">Nombre</th>
+              <th class="py-2 text-left">Descripción</th>
+              <th class="py-2 text-left">Categoría</th>
+              <th class="py-2 text-left">Precio</th>
+              <th class="py-2 text-left">Stock</th>
+              <th class="py-2 text-left">Destacado</th>
+              <th class="py-2 text-left">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaProductos"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- JS generales -->
+  <script src="/js/admin.js"></script>
+  <!-- JS de productos -->
+  <script src="/js/productos.js"></script>
+</body>
+</html>

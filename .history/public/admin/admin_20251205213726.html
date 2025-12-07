@@ -1,0 +1,473 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Admin</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fuente bonita (opcional, igual que en el cliente) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos propios del panel admin (para tabs, modales, etc.) -->
+  <link rel="stylesheet" href="/static/css/admin.css" />
+
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f5eee7] min-h-screen text-slate-900">
+
+  <div class="admin-layout min-h-screen flex flex-col">
+    <!-- HEADER -->
+    <header class="admin-header bg-[#8a555b] text-white shadow-md">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
+        <div class="admin-brand flex items-start gap-3">
+          <div class="text-2xl">💎</div>
+          <div class="leading-tight">
+            <span class="block text-lg font-semibold tracking-wide">Accesorios Frices</span>
+            <small class="block text-xs opacity-80">Panel de administración</small>
+          </div>
+        </div>
+
+        <div class="admin-user flex items-center gap-3">
+          <span id="adminUserName" class="text-sm md:text-base font-medium"></span>
+          <button
+            id="adminLogoutBtn"
+            class="btn btn-danger inline-flex items-center justify-center px-4 py-2 rounded-full text-xs md:text-sm font-semibold bg-white/10 hover:bg-white/20 border border-white/30 transition"
+          >
+            Cerrar sesión
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="admin-main flex-1">
+      <div class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+
+        <!-- Mensajes globales -->
+        <div
+          id="adminMessage"
+          class="admin-message hidden text-sm rounded-xl border border-amber-200 bg-amber-50 px-4 py-3"
+        ></div>
+
+        <!-- Menú horizontal -->
+        <nav class="admin-nav flex items-center gap-3 border-b border-slate-200 pb-3 overflow-x-auto">
+          <button
+            class="tab-btn active relative px-4 py-2 rounded-full text-xs md:text-sm font-medium bg-white shadow-sm border border-slate-200 hover:bg-slate-50 transition whitespace-nowrap"
+            data-section="clientesSection"
+          >
+            Clientes
+          </button>
+          <button
+            class="tab-btn px-4 py-2 rounded-full text-xs md:text-sm font-medium bg-transparent border border-transparent hover:bg-white hover:border-slate-200 transition whitespace-nowrap"
+            data-section="categoriasSection"
+          >
+            Categorías
+          </button>
+          <button
+            class="tab-btn px-4 py-2 rounded-full text-xs md:text-sm font-medium bg-transparent border border-transparent hover:bg-white hover:border-slate-200 transition whitespace-nowrap"
+            data-section="productosSection"
+          >
+            Productos
+          </button>
+        </nav>
+
+        <!-- ========= CLIENTES ========= -->
+        <section
+          id="clientesSection"
+          class="admin-section active bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200 p-4 md:p-5 space-y-4"
+        >
+          <div class="section-header flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-slate-800">Clientes</h2>
+            <button
+              id="btnNuevoCliente"
+              class="primary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-[#8a555b] text-white shadow-sm hover:bg-[#75474d] transition"
+            >
+              + Nuevo cliente
+            </button>
+          </div>
+
+          <div class="table-wrapper overflow-x-auto rounded-2xl border border-slate-200">
+            <table class="admin-table min-w-full text-left text-sm">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">ID</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Nombre</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Email</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Activo</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Creado</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="clientesTbody" class="divide-y divide-slate-100">
+                <!-- filas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========= CATEGORÍAS ========= -->
+        <section
+          id="categoriasSection"
+          class="admin-section bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200 p-4 md:p-5 space-y-4"
+        >
+          <div class="section-header flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-slate-800">Categorías</h2>
+            <button
+              id="btnNuevaCategoria"
+              class="primary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-[#8a555b] text-white shadow-sm hover:bg-[#75474d] transition"
+            >
+              + Nueva categoría
+            </button>
+          </div>
+          <div class="table-wrapper overflow-x-auto rounded-2xl border border-slate-200">
+            <table class="admin-table min-w-full text-left text-sm">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">ID</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Nombre</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Descripción</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Activa</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="categoriasTbody" class="divide-y divide-slate-100">
+                <!-- filas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========= PRODUCTOS ========= -->
+        <section
+          id="productosSection"
+          class="admin-section bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200 p-4 md:p-5 space-y-4"
+        >
+          <div class="section-header flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-slate-800">Productos</h2>
+            <button
+              id="btnNuevoProducto"
+              class="primary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-[#8a555b] text-white shadow-sm hover:bg-[#75474d] transition"
+            >
+              + Nuevo producto
+            </button>
+          </div>
+          <div class="table-wrapper overflow-x-auto rounded-2xl border border-slate-200">
+            <table class="admin-table min-w-full text-left text-sm">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">ID</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Nombre</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Categoría</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Precio</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Stock</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Activo</th>
+                  <th class="px-4 py-2 font-semibold text-xs text-slate-500 uppercase tracking-wide">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="productosTbody" class="divide-y divide-slate-100">
+                <!-- filas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========= MODAL CLIENTE ========= -->
+  <div
+    class="modal hidden fixed inset-0 z-40 flex items-center justify-center"
+    id="clienteModal"
+  >
+    <div
+      class="modal-backdrop absolute inset-0 bg-black/30 backdrop-blur-sm"
+      data-close-modal
+    ></div>
+
+    <div class="modal-dialog relative bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 space-y-4">
+      <h3 id="clienteModalTitle" class="text-lg font-semibold text-slate-800">Nuevo cliente</h3>
+      <form id="clienteForm" class="modal-form space-y-4">
+        <input type="hidden" id="clienteId" />
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Nombre</span>
+          <input
+            type="text"
+            id="clienteNombre"
+            required
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Email</span>
+          <input
+            type="email"
+            id="clienteEmail"
+            required
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Contraseña</span>
+          <input
+            type="password"
+            id="clientePassword"
+            placeholder="(deja vacío para no cambiar)"
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          />
+        </label>
+
+        <label class="inline flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            id="clienteActivo"
+            checked
+            class="rounded border-slate-300 text-[#8a555b] focus:ring-[#8a555b]"
+          />
+          <span>Activo</span>
+        </label>
+
+        <div class="modal-actions flex justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            class="primary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-[#8a555b] text-white shadow-sm hover:bg-[#75474d] transition"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="secondary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========= MODAL CATEGORÍA ========= -->
+  <div
+    class="modal hidden fixed inset-0 z-40 flex items-center justify-center"
+    id="categoriaModal"
+  >
+    <div
+      class="modal-backdrop absolute inset-0 bg-black/30 backdrop-blur-sm"
+      data-close-modal
+    ></div>
+
+    <div class="modal-dialog relative bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 space-y-4">
+      <h3 id="categoriaModalTitle" class="text-lg font-semibold text-slate-800">Nueva categoría</h3>
+      <form id="categoriaForm" class="modal-form space-y-4">
+        <input type="hidden" id="categoriaId" />
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Nombre</span>
+          <input
+            type="text"
+            id="categoriaNombre"
+            required
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Descripción</span>
+          <textarea
+            id="categoriaDescripcion"
+            rows="3"
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none resize-none"
+          ></textarea>
+        </label>
+
+        <label class="inline flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            id="categoriaActiva"
+            checked
+            class="rounded border-slate-300 text-[#8a555b] focus:ring-[#8a555b]"
+          />
+          <span>Activa</span>
+        </label>
+
+        <div class="modal-actions flex justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            class="primary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-[#8a555b] text-white shadow-sm hover:bg-[#75474d] transition"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="secondary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========= MODAL PRODUCTO ========= -->
+  <div
+    class="modal hidden fixed inset-0 z-40 flex items-center justify-center"
+    id="productoModal"
+  >
+    <div
+      class="modal-backdrop absolute inset-0 bg-black/30 backdrop-blur-sm"
+      data-close-modal
+    ></div>
+
+    <div class="modal-dialog relative bg-white rounded-2xl shadow-xl w-full max-w-xl p-6 space-y-4">
+      <h3 id="productoModalTitle" class="text-lg font-semibold text-slate-800">Nuevo producto</h3>
+      <form id="productoForm" class="modal-form space-y-4">
+        <input type="hidden" id="productoId" />
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Nombre</span>
+          <input
+            type="text"
+            id="productoNombre"
+            required
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Categoría</span>
+          <select
+            id="productoCategoria"
+            required
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          >
+            <!-- opciones por JS -->
+          </select>
+        </label>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Precio</span>
+            <input
+              type="number"
+              step="0.01"
+              id="productoPrecio"
+              required
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+            />
+          </label>
+
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Stock</span>
+            <input
+              type="number"
+              id="productoStock"
+              value="0"
+              min="0"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+            />
+          </label>
+        </div>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">URL de imagen</span>
+          <input
+            type="url"
+            id="productoUrlImagen"
+            placeholder="https://..."
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+          />
+        </label>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Material</span>
+            <input
+              type="text"
+              id="productoMaterial"
+              placeholder="Acero inoxidable, oro laminado, etc."
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+            />
+          </label>
+
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Color</span>
+            <input
+              type="text"
+              id="productoColor"
+              placeholder="Dorado, plateado, rosa, multicolor..."
+              class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none"
+            />
+          </label>
+        </div>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Descripción</span>
+          <textarea
+            id="productoDescripcion"
+            rows="3"
+            class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#8a555b] focus:border-[#8a555b] outline-none resize-none"
+          ></textarea>
+        </label>
+
+        <div class="inline-group flex flex-wrap gap-4 text-sm">
+          <label class="inline flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="productoActivo"
+              checked
+              class="rounded border-slate-300 text-[#8a555b] focus:ring-[#8a555b]"
+            />
+            <span>Activo</span>
+          </label>
+          <label class="inline flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="productoDestacado"
+              class="rounded border-slate-300 text-[#8a555b] focus:ring-[#8a555b]"
+            />
+            <span>Destacado</span>
+          </label>
+          <label class="inline flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="productoEnOferta"
+              class="rounded border-slate-300 text-[#8a555b] focus:ring-[#8a555b]"
+            />
+            <span>En oferta</span>
+          </label>
+        </div>
+
+        <div class="modal-actions flex justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            class="primary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-semibold bg-[#8a555b] text-white shadow-sm hover:bg-[#75474d] transition"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="secondary inline-flex items-center justify-center px-4 py-2 rounded-xl text-xs md:text-sm font-medium border border-slate-200 bg-white hover:bg-slate-50 transition"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lógica del panel admin (fetch a /api/*, tabs, modales, etc.) -->
+  <!-- Ajusta la ruta si moviste el archivo JS -->
+  <script src="/static/admin.js"></script>
+</body>
+</html>

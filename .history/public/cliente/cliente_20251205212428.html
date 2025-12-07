@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Cliente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- ============================
+       BARRA SUPERIOR
+  ============================= -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto py-2 px-4 text-center">
+      ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+    </div>
+  </div>
+
+  <!-- ============================
+       NAVBAR
+  ============================= -->
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3 relative">
+
+      <!-- IZQUIERDA -->
+      <div class="flex items-center gap-4 text-sm">
+        <a href="/static/cliente/cliente.html" class="hover:text-[#8a555b]">Inicio</a>
+        <a href="#categorias" class="hover:text-[#8a555b]">Categorías</a>
+      </div>
+
+      <!-- CENTRO: TÍTULO -->
+      <div class="absolute left-1/2 -translate-x-1/2">
+        <span class="text-xl font-semibold tracking-wide text-[#8a555b]">
+          Accesorios <span class="text-orange-600">Frices</span>
+        </span>
+      </div>
+
+      <!-- DERECHA: ICONOS -->
+      <div class="flex items-center gap-5 text-lg relative">
+
+        <!-- BUSCADOR -->
+        <button class="hover:text-[#8a555b]" title="Buscar">
+          🔍
+        </button>
+
+        <!-- PERFIL + HOLA, NOMBRE -->
+        <button id="userMenuBtn" class="flex items-center gap-1 hover:text-[#8a555b]" title="Mi cuenta">
+          <span>👤</span>
+          <span id="userGreeting" class="text-xs md:text-sm"></span>
+        </button>
+
+        <!-- FAVORITOS -->
+        <button class="hover:text-[#8a555b]" title="Favoritos">
+          💜
+        </button>
+
+        <!-- CARRITO -->
+        <button class="hover:text-[#8a555b] relative" title="Carrito">
+          🛒
+          <span class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs px-2 py-[1px] rounded-full">0</span>
+        </button>
+
+        <!-- MENÚ DESPLEGABLE USUARIO -->
+        <div id="userMenu"
+          class="hidden absolute right-0 top-10 w-48 bg-white shadow-lg rounded-xl border border-gray-100 text-sm z-20">
+          <div class="px-4 py-3 border-b">
+            <p class="text-xs text-gray-500">Sesión iniciada como</p>
+            <p id="userName" class="font-semibold text-gray-800 truncate"></p>
+          </div>
+          <button id="logoutClienteBtn" class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 text-xs">
+            Cerrar sesión
+          </button>
+        </div>
+
+      </div>
+
+
+    </nav>
+  </header>
+
+  <!-- ============================
+       HERO (PORTADA BONITA)
+  ============================= -->
+  <section class="w-full text-white bg-cover bg-center"
+    style="background-image: url('https://images.pexels.com/photos/19272523/pexels-photo-19272523.jpeg?auto=compress');">
+    <div class="w-full h-full bg-black/40">
+      <div class="max-w-6xl mx-auto px-4 py-20 text-center">
+
+        <p class="text-sm mb-2">
+          Joyería de Acero Inoxidable para iluminar tu estilo ✨
+        </p>
+
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">
+          Descubre piezas únicas para usar<br class="hidden md:block">
+          todos los días
+        </h1>
+
+        <p class="text-base md:text-lg mb-6 opacity-90">
+          Calidad, brillo y durabilidad en cada accesorio. Diseñados para acompañarte en tu día a día.
+        </p>
+
+        <a href="#categorias"
+          class="inline-block px-8 py-3 bg-white text-[#8a555b] rounded-full text-sm font-semibold shadow hover:bg-[#f2eaea]">
+          Empieza tu colección hoy ✨
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================
+       CONTENIDO PRINCIPAL
+  ============================= -->
+  <main class="max-w-6xl mx-auto px-4 py-12">
+
+    <!-- ============================
+         CATEGORÍAS
+    ============================= -->
+    <section id="categorias" class="mb-12">
+      <h2 class="text-2xl font-semibold mb-6">Categorías</h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg cursor-pointer">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium text-center">Aretes</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg cursor-pointer">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium text-center">Cadenas</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg cursor-pointer">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium text-center">Pulseras</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg cursor-pointer">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium text-center">Sets</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================
+         PRODUCTOS DESTACADOS
+    ============================= -->
+    <section id="destacados">
+      <h2 class="text-2xl font-semibold mb-6">Productos destacados</h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium">Set corazón</p>
+          <p class="text-xs text-gray-600">Acero inoxidable</p>
+          <p class="text-sm font-bold mt-1">$249 MXN</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium">Aretes luna</p>
+          <p class="text-xs text-gray-600">Oro laminado</p>
+          <p class="text-sm font-bold mt-1">$199 MXN</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium">Collar brillo</p>
+          <p class="text-xs text-gray-600">Acero inoxidable</p>
+          <p class="text-sm font-bold mt-1">$299 MXN</p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow p-4 hover:shadow-lg">
+          <div class="h-28 bg-gray-200 rounded-xl mb-3"></div>
+          <p class="text-sm font-medium">Set minimalista</p>
+          <p class="text-xs text-gray-600">Acero inoxidable</p>
+          <p class="text-sm font-bold mt-1">$269 MXN</p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================
+       SCRIPT: MOSTRAR "HOLA, NOMBRE"
+  ============================= -->
+    <!-- JS del cliente -->
+  <script src="/static/js/cliente.js"></script>
+</body>
+</html>
+
+</body>
+
+</html>

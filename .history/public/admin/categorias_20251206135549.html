@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Categorías</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+    <header class="bg-[#8a555b] text-white">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/static/admin/admin.html" class="underline text-sm">← Volver</a>
+
+            <h1 class="text-lg font-semibold">Categorías</h1>
+            <button id="btnLogout" class="px-3 py-1 border rounded-lg">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+        <div id="adminMessage" class="text-sm"></div>
+
+        <!-- Form -->
+        <section class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="font-semibold mb-3">Agregar / Editar categoría</h2>
+
+            <form id="categoriaForm" class="grid gap-4 md:grid-cols-3 items-end">
+                <input type="hidden" id="catId">
+
+                <div>
+                    <label class="text-sm">Nombre</label>
+                    <input id="catNombre" class="w-full border rounded-xl px-3 py-2 text-sm" required>
+                </div>
+
+                <div>
+                    <label class="text-sm">Descripción</label>
+                    <input id="catDescripcion" class="w-full border rounded-xl px-3 py-2 text-sm">
+                </div>
+
+                <div class="flex gap-2">
+                    <button class="px-4 py-2 rounded-xl bg-[#8a555b] text-white">Guardar</button>
+                    <button id="btnResetForm" type="button" class="px-4 py-2 rounded-xl border">Limpiar</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Tabla -->
+        <section class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="font-semibold mb-3">Listado de categorías</h2>
+
+            <table class="w-full text-sm">
+                <thead class="border-b">
+                    <tr>
+                        <th class="py-2">ID</th>
+                        <th class="py-2">Nombre</th>
+                        <th class="py-2">Descripción</th>
+                        <th class="py-2">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCategorias"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script src="/static/js/categorias.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+  <header class="bg-[#8a555b] text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-lg font-semibold">Panel de administración</h1>
+      <button id="btnLogout" class="px-3 py-1 border rounded-lg">Cerrar sesión</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-10 grid gap-6 md:grid-cols-3">
+
+    <a href="categorias.html" class="bg-white shadow p-6 rounded-2xl hover:shadow-lg">
+      <h2 class="font-semibold">Categorías</h2>
+      <p class="text-sm text-gray-600">Gestionar categorías.</p>
+    </a>
+
+    <a href="productos.html" class="bg-white shadow p-6 rounded-2xl hover:shadow-lg">
+      <h2 class="font-semibold">Productos</h2>
+      <p class="text-sm text-gray-600">Gestionar productos.</p>
+    </a>
+
+    <a href="clientes.html" class="bg-white shadow p-6 rounded-2xl hover:shadow-lg">
+      <h2 class="font-semibold">Clientes</h2>
+      <p class="text-sm text-gray-600">Ver registros de clientes.</p>
+    </a>
+
+  </main>
+
+  <script src="/static/js/admin.js"></script>
+
+</body>
+</html>

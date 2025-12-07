@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Registro</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  </style>
+</head>
+<body class="bg-[#f5eee7] text-gray-900 min-h-screen flex flex-col">
+
+  <!-- HEADER IGUAL QUE LOGIN -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto flex items-center justify-center gap-2 py-2 px-4 text-center">
+      <span class="text-xs md:text-sm">
+        ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+      </span>
+    </div>
+  </div>
+
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-4 text-sm">
+        <a href="/static/index.html" class="hover:text-[#8a555b]">Inicio</a>
+        <a href="/static/cliente/cliente.html" class="hover:text-[#8a555b]">Categorías</a>
+      </div>
+      <div class="absolute left-1/2 -translate-x-1/2">
+        <span class="text-xl font-semibold tracking-wide text-[#8a555b]">Accesorios Frices</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <a href="/static/auth/login.html" class="hover:text-[#8a555b]">👤</a>
+        <a href="#" class="hover:text-[#8a555b]">💜</a>
+        <a href="#" class="hover:text-[#8a555b]">🛒</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO REGISTRO -->
+  <main class="flex-1 flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
+      <h2 class="text-2xl font-semibold text-[#8a555b] text-center mb-2">Crear cuenta</h2>
+      <p class="text-xs text-gray-500 text-center mb-4">
+        Regístrate para guardar tus pedidos, favoritos y datos de envío.
+      </p>
+
+      <div id="message" class="text-xs text-center text-red-600 mb-2"></div>
+      <div id="msg-registro" class="text-xs text-center text-red-600 mb-2"></div>
+
+      <!-- IMPORTANTE: usamos JS, NO action directo -->
+      <form onsubmit="event.preventDefault(); registrar();" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Nombre completo</label>
+          <input
+            id="reg-nombre"
+            type="text"
+            required
+            class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#8a555b]"
+            placeholder="Tu nombre"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico</label>
+          <input
+            id="reg-email"
+            type="email"
+            required
+            class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#8a555b]"
+            placeholder="tucorreo@example.com"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-700 mb-1">Contraseña</label>
+          <input
+            id="reg-pass"
+            type="password"
+            required
+            minlength="8"
+            class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#8a555b]"
+            placeholder="Mínimo 8 caracteres"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full mt-2 px-4 py-2 rounded-lg bg-[#8a555b] text-white text-sm font-semibold hover:bg-[#6d4247]">
+          Registrarse
+        </button>
+      </form>
+
+      <p class="text-xs text-gray-600 text-center mt-4">
+        ¿Ya tienes una cuenta?
+        <a href="/static/auth/login.html" class="text-[#8a555b] font-medium hover:underline">
+          Iniciar sesión
+        </a>
+      </p>
+    </div>
+  </main>
+
+  <!-- LÓGICA REGISTRO -->
+  <script>
+    const API_URL = "/api";
+    const $ = (id) => document.getElementById(id);
+
+    function clearMessages() {
+      const m1 = $("message");
+      const m2 = $("msg-registro");
+      if (m1) m1.innerText = "";
+      if (m2) m2.innerText = "";
+    }
+
+    function validarEmail(correo) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+    }
+
+    async function registrar() {
+      clearMessages();
+
+      const nombre = $("reg-nombre").value.trim();
+      const email  = $("reg-email").value.trim();
+      const pass   = $("reg-pass").value.trim();
+
+      if (!nombre || !email || !pass) {
+        $("msg-registro").innerText = "⚠️ Completa todos los campos.";
+        return;
+      }
+
+      if (!validarEmail(email)) {
+        $("msg-registro").innerText = "⚠️ El correo no es válido.";
+        return;
+      }
+
+      if (pass.length < 8) {
+        $("msg-registro").innerText = "⚠️ La contraseña debe tener mínimo 8 caracteres.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/auth/register`, {  // 👈 RUTA CORRECTA
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, email, password: pass }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          // Mensajes típicos del backend
+          if (data.message?.includes("registrado")) {
+            $("msg-registro").innerText =
+              "⚠️ Este correo ya está registrado. Intenta iniciar sesión.";
+          } else {
+            $("msg-registro").innerText = data.message || "⚠️ Error al registrar.";
+          }
+          return;
+        }
+
+        $("msg-registro").innerText = "🎉 Registro exitoso. Ahora inicia sesión.";
+        setTimeout(() => {
+          window.location.href = "/static/auth/login.html";
+        }, 1200);
+
+      } catch (err) {
+        console.error(err);
+        $("message").innerText = "❌ Error de red al registrar.";
+      }
+    }
+  </script>
+
+</body>
+</html>

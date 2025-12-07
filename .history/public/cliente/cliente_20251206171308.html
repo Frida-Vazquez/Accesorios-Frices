@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Clientes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- HEADER -->
+  <header class="bg-[#8a555b] text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <a href="/static/admin/admin.html" class="underline text-sm">← Volver</a>
+        <h1 class="text-lg font-semibold">Clientes</h1>
+      </div>
+
+      <button id="btnLogout"
+        class="px-3 py-1 border rounded-lg bg-white/10 hover:bg-white/20 text-sm">
+        Cerrar sesión
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Mensajes -->
+    <div id="adminMessage" class="text-sm"></div>
+
+    <!-- TARJETA: TABLA DE CLIENTES -->
+    <section class="bg-white p-6 rounded-2xl shadow space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold text-lg">Clientes</h2>
+        <button id="btnNuevoCliente"
+          class="px-4 py-2 rounded-full text-sm bg-amber-500 text-white hover:bg-amber-600">
+          + Nuevo cliente
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-amber-100 text-left">
+            <tr>
+              <th class="py-2 px-3">ID</th>
+              <th class="py-2 px-3">Nombre</th>
+              <th class="py-2 px-3">Email</th>
+              <th class="py-2 px-3">Activo</th>
+              <th class="py-2 px-3">Creado</th>
+              <th class="py-2 px-3">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tablaClientes"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TARJETA: FORMULARIO -->
+    <section class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="font-semibold mb-3">Agregar / Editar cliente</h2>
+
+      <form id="clienteForm" class="grid gap-4 md:grid-cols-3 items-end">
+        <input type="hidden" id="clienteId" />
+
+        <div>
+          <label class="text-sm">Nombre</label>
+          <input id="clienteNombre" class="w-full border rounded-xl px-3 py-2 text-sm" required />
+        </div>
+
+        <div>
+          <label class="text-sm">Email</label>
+          <input id="clienteEmail" type="email"
+            class="w-full border rounded-xl px-3 py-2 text-sm" required />
+        </div>
+
+        <div>
+          <label class="text-sm">Contraseña</label>
+          <input id="clientePassword" type="password"
+            class="w-full border rounded-xl px-3 py-2 text-sm"
+            placeholder="Dejar vacío para no cambiar" />
+        </div>
+
+        <div class="flex items-center gap-2">
+          <input id="clienteActivo" type="checkbox" class="w-4 h-4" checked />
+          <label class="text-sm">Activo</label>
+        </div>
+
+        <div class="flex gap-3 md:col-span-2">
+          <button type="submit"
+            class="px-4 py-2 rounded-full bg-[#8a555b] text-white text-sm hover:bg-[#744349]">
+            Guardar
+          </button>
+          <button type="button" id="clienteReset"
+            class="px-4 py-2 rounded-full border text-sm hover:bg-slate-50">
+            Limpiar
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <script src="/static/js/cliente-admin.js"></script>
+</body>
+
+</html>

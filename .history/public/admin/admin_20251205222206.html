@@ -1,0 +1,446 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Admin</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fuente bonita -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- TU CSS original: aquí están .admin-section.active, .modal, etc -->
+  <link rel="stylesheet" href="/static/css/admin.css" />
+
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-[#f2e0bf] via-[#e6c993] to-[#d3a971] flex justify-center py-6">
+
+  <div class="admin-layout w-full max-w-6xl space-y-6">
+
+    <!-- HEADER -->
+    <header class="admin-header bg-[#fffaf3]/95 rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.16)] px-6 md:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="admin-brand flex items-start gap-3">
+        <div class="text-2xl mt-1">💎</div>
+        <div class="leading-tight">
+          <span class="block text-lg md:text-xl font-semibold text-slate-800 tracking-wide">
+            Accesorios Frices
+          </span>
+          <small class="block text-xs text-slate-500">
+            Panel admin
+          </small>
+        </div>
+      </div>
+      <div class="admin-user flex items-center gap-3 md:gap-4 justify-end">
+        <span id="adminUserName" class="text-sm md:text-base text-slate-700"></span>
+        <button
+          id="adminLogoutBtn"
+          class="btn btn-danger inline-flex items-center justify-center rounded-full px-4 py-2 text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#ff6b6b] to-[#ff4b5c] shadow-[0_10px_20px_rgba(255,75,92,0.45)] hover:brightness-105 transition"
+        >
+          Cerrar sesión
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="admin-main">
+      <div class="bg-[#fffaf3]/90 backdrop-blur-sm rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.12)] px-4 md:px-7 py-5 md:py-7 space-y-5">
+
+        <!-- Mensajes globales -->
+        <div
+          id="adminMessage"
+          class="admin-message text-sm rounded-2xl border border-transparent px-4 py-3"
+        ></div>
+
+        <!-- Menú horizontal -->
+        <nav class="admin-nav flex items-center gap-3 border-b border-[#ecd8ac] pb-3 overflow-x-auto">
+          <button
+            class="tab-btn active relative px-4 py-2 rounded-full text-xs md:text-sm font-medium text-slate-800 bg-[#f7e7c3] shadow-[0_6px_12px_rgba(0,0,0,0.12)] whitespace-nowrap"
+            data-section="clientesSection"
+          >
+            Clientes
+          </button>
+          <button
+            class="tab-btn relative px-4 py-2 rounded-full text-xs md:text-sm font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-[#f9edd0] whitespace-nowrap transition"
+            data-section="categoriasSection"
+          >
+            Categorías
+          </button>
+          <button
+            class="tab-btn relative px-4 py-2 rounded-full text-xs md:text-sm font-medium text-slate-600 hover:text-slate-900 bg-transparent hover:bg-[#f9edd0] whitespace-nowrap transition"
+            data-section="productosSection"
+          >
+            Productos
+          </button>
+        </nav>
+
+        <!-- ========= CLIENTES ========= -->
+        <section id="clientesSection" class="admin-section active space-y-4">
+          <div class="section-header flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-slate-800">Clientes</h2>
+            <button
+              id="btnNuevoCliente"
+              class="primary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#d69b32] to-[#e0b34f] shadow-[0_10px_18px_rgba(214,155,50,0.55)] hover:brightness-105 transition"
+            >
+              + Nuevo cliente
+            </button>
+          </div>
+          <div class="table-wrapper overflow-x-auto rounded-3xl border border-[#ecd8ac] bg-white/80">
+            <table class="admin-table min-w-full text-left text-sm">
+              <thead>
+                <tr class="bg-[#e6c98f] text-slate-800">
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">ID</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Nombre</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Email</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Activo</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Creado</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="clientesTbody" class="divide-y divide-[#f0e0c0]">
+                <!-- filas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========= CATEGORÍAS ========= -->
+        <section id="categoriasSection" class="admin-section space-y-4">
+          <div class="section-header flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-slate-800">Categorías</h2>
+            <button
+              id="btnNuevaCategoria"
+              class="primary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#d69b32] to-[#e0b34f] shadow-[0_10px_18px_rgba(214,155,50,0.55)] hover:brightness-105 transition"
+            >
+              + Nueva categoría
+            </button>
+          </div>
+          <div class="table-wrapper overflow-x-auto rounded-3xl border border-[#ecd8ac] bg-white/80">
+            <table class="admin-table min-w-full text-left text-sm">
+              <thead>
+                <tr class="bg-[#e6c98f] text-slate-800">
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">ID</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Nombre</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Descripción</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Activa</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="categoriasTbody" class="divide-y divide-[#f0e0c0]">
+                <!-- filas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========= PRODUCTOS ========= -->
+        <section id="productosSection" class="admin-section space-y-4">
+          <div class="section-header flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <h2 class="text-lg font-semibold text-slate-800">Productos</h2>
+            <button
+              id="btnNuevoProducto"
+              class="primary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#d69b32] to-[#e0b34f] shadow-[0_10px_18px_rgba(214,155,50,0.55)] hover:brightness-105 transition"
+            >
+              + Nuevo producto
+            </button>
+          </div>
+          <div class="table-wrapper overflow-x-auto rounded-3xl border border-[#ecd8ac] bg-white/80">
+            <table class="admin-table min-w-full text-left text-sm">
+              <thead>
+                <tr class="bg-[#e6c98f] text-slate-800">
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">ID</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Nombre</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Categoría</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Precio</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Stock</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Activo</th>
+                  <th class="px-4 py-2 font-semibold text-xs uppercase tracking-wide">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="productosTbody" class="divide-y divide-[#f0e0c0]">
+                <!-- filas por JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ========= MODAL CLIENTE ========= -->
+  <div class="modal hidden fixed inset-0 z-40 flex items-center justify-center" id="clienteModal">
+    <div class="modal-backdrop absolute inset-0 bg-black/35 backdrop-blur-sm" data-close-modal></div>
+
+    <div class="modal-dialog relative bg-[#fff5e4] rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.35)] w-full max-w-lg p-6 space-y-4">
+      <h3 id="clienteModalTitle" class="text-lg font-semibold text-slate-800">Nuevo cliente</h3>
+      <form id="clienteForm" class="modal-form space-y-4">
+        <input type="hidden" id="clienteId" />
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Nombre</span>
+          <input
+            type="text"
+            id="clienteNombre"
+            required
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Email</span>
+          <input
+            type="email"
+            id="clienteEmail"
+            required
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Contraseña</span>
+          <input
+            type="password"
+            id="clientePassword"
+            placeholder="(deja vacío para no cambiar)"
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          />
+        </label>
+
+        <label class="inline flex items-center gap-2 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            id="clienteActivo"
+            checked
+            class="rounded border-[#e3c792] text-[#d69b32] focus:ring-[#d69b32]"
+          />
+          <span>Activo</span>
+        </label>
+
+        <div class="modal-actions flex justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            class="primary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#d69b32] to-[#e0b34f] shadow-[0_10px_18px_rgba(214,155,50,0.55)] hover:brightness-105 transition"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="secondary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-medium text-slate-700 border border-[#e3c792] bg-white hover:bg-[#f7ebd4] transition"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========= MODAL CATEGORÍA ========= -->
+  <div class="modal hidden fixed inset-0 z-40 flex items-center justify-center" id="categoriaModal">
+    <div class="modal-backdrop absolute inset-0 bg-black/35 backdrop-blur-sm" data-close-modal></div>
+
+    <div class="modal-dialog relative bg-[#fff5e4] rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.35)] w-full max-w-lg p-6 space-y-4">
+      <h3 id="categoriaModalTitle" class="text-lg font-semibold text-slate-800">Nueva categoría</h3>
+      <form id="categoriaForm" class="modal-form space-y-4">
+        <input type="hidden" id="categoriaId" />
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Nombre</span>
+          <input
+            type="text"
+            id="categoriaNombre"
+            required
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Descripción</span>
+          <textarea
+            id="categoriaDescripcion"
+            rows="3"
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm resize-none focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          ></textarea>
+        </label>
+
+        <label class="inline flex items-center gap-2 text-sm text-slate-700">
+          <input
+            type="checkbox"
+            id="categoriaActiva"
+            checked
+            class="rounded border-[#e3c792] text-[#d69b32] focus:ring-[#d69b32]"
+          />
+          <span>Activa</span>
+        </label>
+
+        <div class="modal-actions flex justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            class="primary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#d69b32] to-[#e0b34f] shadow-[0_10px_18px_rgba(214,155,50,0.55)] hover:brightness-105 transition"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="secondary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-medium text-slate-700 border border-[#e3c792] bg-white hover:bg-[#f7ebd4] transition"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========= MODAL PRODUCTO ========= -->
+  <div class="modal hidden fixed inset-0 z-40 flex items-center justify-center" id="productoModal">
+    <div class="modal-backdrop absolute inset-0 bg-black/35 backdrop-blur-sm" data-close-modal></div>
+
+    <div class="modal-dialog relative bg-[#fff5e4] rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.35)] w-full max-w-xl p-6 space-y-4">
+      <h3 id="productoModalTitle" class="text-lg font-semibold text-slate-800">Nuevo producto</h3>
+      <form id="productoForm" class="modal-form space-y-4">
+        <input type="hidden" id="productoId" />
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Nombre</span>
+          <input
+            type="text"
+            id="productoNombre"
+            required
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          />
+        </label>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Categoría</span>
+          <select
+            id="productoCategoria"
+            required
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          >
+            <!-- opciones por JS -->
+          </select>
+        </label>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Precio</span>
+            <input
+              type="number"
+              step="0.01"
+              id="productoPrecio"
+              required
+              class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+            />
+          </label>
+
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Stock</span>
+            <input
+              type="number"
+              id="productoStock"
+              value="0"
+              min="0"
+              class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+            />
+          </label>
+        </div>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">URL de imagen</span>
+          <input
+            type="url"
+            id="productoUrlImagen"
+            placeholder="https://..."
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          />
+        </label>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Material</span>
+            <input
+              type="text"
+              id="productoMaterial"
+              placeholder="Acero inoxidable, oro laminado, etc."
+              class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+            />
+          </label>
+
+          <label class="block text-sm space-y-1">
+            <span class="font-medium text-slate-700">Color</span>
+            <input
+              type="text"
+              id="productoColor"
+              placeholder="Dorado, plateado, rosa, multicolor..."
+              class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+            />
+          </label>
+        </div>
+
+        <label class="block text-sm space-y-1">
+          <span class="font-medium text-slate-700">Descripción</span>
+          <textarea
+            id="productoDescripcion"
+            rows="3"
+            class="w-full rounded-xl border border-[#e3c792] bg-white px-3 py-2 text-sm resize-none focus:ring-2 focus:ring-[#d69b32] focus:border-[#d69b32] outline-none"
+          ></textarea>
+        </label>
+
+        <div class="inline-group flex flex-wrap gap-4 text-sm text-slate-700">
+          <label class="inline flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="productoActivo"
+              checked
+              class="rounded border-[#e3c792] text-[#d69b32] focus:ring-[#d69b32]"
+            />
+            <span>Activo</span>
+          </label>
+          <label class="inline flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="productoDestacado"
+              class="rounded border-[#e3c792] text-[#d69b32] focus:ring-[#d69b32]"
+            />
+            <span>Destacado</span>
+          </label>
+          <label class="inline flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="productoEnOferta"
+              class="rounded border-[#e3c792] text-[#d69b32] focus:ring-[#d69b32]"
+            />
+            <span>En oferta</span>
+          </label>
+        </div>
+
+        <div class="modal-actions flex justify-end gap-3 pt-2">
+          <button
+            type="submit"
+            class="primary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-semibold text-white bg-gradient-to-r from-[#d69b32] to-[#e0b34f] shadow-[0_10px_18px_rgba(214,155,50,0.55)] hover:brightness-105 transition"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="secondary inline-flex items-center justify-center px-5 py-2 rounded-full text-xs md:text-sm font-medium text-slate-700 border border-[#e3c792] bg-white hover:bg-[#f7ebd4] transition"
+            data-close-modal
+          >
+            Cancelar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lógica del panel admin (fetch a /api/*, tabs, modales, etc.) -->
+  <script src="/static/admin.js"></script>
+</body>
+</html>

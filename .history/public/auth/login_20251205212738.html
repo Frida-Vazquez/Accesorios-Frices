@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Accesorios Frices - Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900 min-h-screen flex flex-col">
+
+    <!-- BARRA SUPERIOR -->
+    <div class="w-full bg-[#8a555b] text-white text-sm">
+        <div class="max-w-6xl mx-auto flex items-center justify-center gap-2 py-2 px-4 text-center">
+            <span class="text-xs md:text-sm">
+                ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+            </span>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="bg-white shadow-sm">
+        <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+            <div class="flex items-center gap-4 text-sm">
+                <a href="/static/index.html" class="hover:text-[#8a555b]">Inicio</a>
+                <a href="/static/cliente/cliente.html" class="hover:text-[#8a555b]">Categorías</a>
+            </div>
+            <div class="absolute left-1/2 -translate-x-1/2">
+                <span class="text-xl font-semibold tracking-wide text-[#8a555b]">Accesorios Frices</span>
+            </div>
+            <div class="flex items-center gap-4 text-sm">
+                <span class="text-[#8a555b]">👤</span>
+                <a href="#" class="hover:text-[#8a555b]">💜</a>
+                <a href="#" class="hover:text-[#8a555b]">🛒</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- CONTENIDO LOGIN -->
+    <main class="flex-1 flex items-center justify-center px-4 py-10">
+        <div class="w-full max-w-md bg-white rounded-2xl shadow-md p-8">
+
+            <!-- PESTAÑAS LOGIN / REGISTER -->
+            <div class="flex border-b text-sm mb-4">
+                <button class="px-4 py-2 border-b-2 border-[#8a555b] text-[#8a555b] font-semibold">
+                    Login
+                </button>
+                <a href="/static/auth/registro.html" class="px-4 py-2 text-gray-500 hover:text-[#8a555b]">
+                    Register
+                </a>
+            </div>
+
+            <h2 class="text-lg font-semibold text-[#8a555b] mb-1">Iniciar Sesión</h2>
+            <p class="text-xs text-gray-500 mb-4">
+                Ingresa para ver tus pedidos, favoritos y datos de tu cuenta.
+            </p>
+
+            <div id="message" class="text-xs text-center text-red-600 mb-1"></div>
+            <div id="msg-login" class="text-xs text-center text-red-600 mb-2"></div>
+
+            <form onsubmit="event.preventDefault(); login();" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Correo electrónico</label>
+                    <input id="log-email" type="email" required
+                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#8a555b]"
+                        placeholder="tucorreo@example.com" />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Contraseña</label>
+                    <input id="log-pass" type="password" required
+                        class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#8a555b]"
+                        placeholder="********" />
+                </div>
+
+                <button type="submit"
+                    class="w-full mt-2 px-4 py-2 rounded-lg bg-[#8a555b] text-white text-sm font-semibold hover:bg-[#6d4247]">
+                    Login
+                </button>
+
+                <p class="text-xs text-center text-gray-500 mt-1 cursor-pointer hover:text-[#8a555b]">
+                    ¿Olvidaste tu contraseña?
+                </p>
+            </form>
+
+            <p class="text-xs text-gray-600 text-center mt-4">
+                ¿Aún no tienes cuenta?
+                <a href="/static/auth/registro.html" class="text-[#8a555b] font-medium hover:underline">
+                    Crear cuenta
+                </a>
+            </p>
+        </div>
+    </main>
+
+    <!-- LÓGICA LOGIN -->
+    <script>
+        const API_URL = "/api";
+        const $ = (id) => document.getElementById(id);
+
+        function clearMessages() {
+            const m1 = $("message");
+            const m2 = $("msg-login");
+            if (m1) m1.innerText = "";
+            if (m2) m2.innerText = "";
+        }
+
+        function validarEmail(correo) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+        }
+
+        async function login() {
+            clearMessages();
+
+            const email = $("log-email").value.trim();
+            const pass = $("log-pass").value.trim();
+
+            if (!email || !pass) {
+                $("msg-login").innerText = "⚠️ Ingresa correo y contraseña.";
+                return;
+            }
+
+            if (!validarEmail(email)) {
+                $("msg-login").innerText = "⚠️ El correo no es válido.";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password: pass }),
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    if (data.message?.includes("Credenciales")) {
+                        $("msg-login").innerText = "❌ Correo o contraseña incorrectos.";
+                    } else {
+                        $("msg-login").innerText = data.message || "❌ Error al iniciar sesión.";
+                    }
+                    return;
+                }
+
+                if (data.token) {
+                    localStorage.setItem("frices_token", data.token);
+                    localStorage.setItem("cliente_token", data.token);
+                    localStorage.setItem(
+                        "cliente_nombre",
+                        data.user?.nombre || data.user?.email || email
+                    );
+                }
+
+                const roles = Array.isArray(data.user?.roles) ? data.user.roles : [];
+
+                if (roles.includes("ADMIN")) {
+                    window.location.href = "/static/admin/admin.html";
+                    return;
+                }
+
+                window.location.href = "/static/cliente/cliente.html";
+
+            } catch (err) {
+                console.error(err);
+                $("message").innerText = "❌ Error de red al iniciar sesión.";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

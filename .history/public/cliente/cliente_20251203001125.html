@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Joyería</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- BARRA SUPERIOR PROMO -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto flex items-center justify-center gap-2 py-2 px-4 text-center">
+      <span class="text-xs md:text-sm">
+        ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+      </span>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="bg-white shadow-sm">
+    <div class="max-w-6xl mx-auto flex items-center justify-between py-4 px-4 md:px-0 gap-4">
+      <!-- Links izquierda -->
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#top" class="hover:text-amber-600 transition-colors">Inicio</a>
+        <a href="#categorias" class="hover:text-amber-600 transition-colors">Categorías</a>
+ 
+      </nav>
+
+      <!-- Logo centro -->
+      <div class="flex-1 flex justify-center">
+        <a href="#top" class="text-2xl md:text-3xl font-semibold tracking-wide">
+          <span class="font-light">Accesorios</span>
+          <span class="text-amber-700">Frices</span>
+        </a>
+      </div>
+
+      <!-- Iconos derecha -->
+      <div class="flex items-center gap-4 text-sm">
+        <!-- Icono búsqueda -->
+        <button class="hidden md:inline-flex">
+          🔍
+        </button>
+
+        <!-- Icono usuario + menú -->
+        <div class="relative">
+          <!-- Botón icono usuario -->
+          <button
+            id="userMenuBtn"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 hover:bg-gray-100"
+          >
+            👤
+          </button>
+
+          <!-- MENÚ DESPLEGABLE -->
+          <div
+            id="userMenu"
+            class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg py-2 text-sm z-50"
+          >
+            <p
+              id="userName"
+              class="px-4 py-2 text-gray-700 font-medium border-b"
+            >
+              Mi cuenta
+            </p>
+
+            <button
+              id="logoutClienteBtn"
+              class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+            >
+              Salir de la cuenta
+            </button>
+          </div>
+        </div>
+
+        <!-- Carrito -->
+        <button class="relative inline-flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 hover:bg-gray-100">
+          🛒
+          <span class="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] rounded-full px-1">
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main id="top" class="pb-16">
+
+    <!-- HERO PRINCIPAL -->
+    <section
+      class="relative min-h-[420px] md:min-h-[520px] flex items-center justify-center overflow-hidden"
+    >
+      <!-- Imagen de fondo -->
+      <div
+        class="absolute inset-0 bg-cover bg-center"
+        style="background-image: url('https://images.pexels.com/photos/1927259/pexels-photo-1927259.jpeg?auto=compress&cs=tinysrgb&w=1600');"
+      ></div>
+
+      <!-- Capa suave -->
+      <div class="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/10"></div>
+
+      <!-- Contenido -->
+      <div class="relative max-w-3xl mx-auto text-center text-white px-4 py-10">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 leading-snug">
+          Joyería de Acero Inoxidable para iluminar tu estilo
+        </h1>
+        <p class="text-sm md:text-base mb-6 max-w-2xl mx-auto">
+          Descubre la belleza y calidad en nuestras piezas y empieza tu colección
+          con baja inversión y alta durabilidad. Diseñadas para acompañarte todos los días.
+        </p>
+
+        <a
+          href="#categorias"
+          class="inline-flex items-center gap-2 bg-white text-gray-900 font-medium px-6 py-3 rounded-full shadow-md hover:bg-amber-100 transition"
+        >
+          Empieza tu colección hoy ✨
+        </a>
+      </div>
+    </section>
+
+    <!-- CATEGORÍAS (dinámico desde la BD) -->
+    <section id="categorias" class="max-w-6xl mx-auto mt-16 px-4 md:px-0">
+      <h2 class="text-3xl font-semibold mb-8">Categorías</h2>
+
+      <div id="categoriasGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Aquí JS va a insertar las cards -->
+      </div>
+    </section>
+
+    <!-- SLIDER DE PRODUCTOS (todas las tarjetas al azar) -->
+    <section id="productos" class="max-w-6xl mx-auto mt-20 px-4 md:px-0">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-3xl font-semibold">Productos destacados</h2>
+        <p class="text-xs text-gray-500">
+          Piezas seleccionadas al azar de nuestro catálogo
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-sm overflow-hidden">
+        <div class="relative flex items-center">
+          <!-- Botón anterior -->
+          <button
+            id="prodPrev"
+            class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md hover:bg-gray-100 absolute left-4 z-20 top-1/2 -translate-y-1/2"
+          >
+            ❮
+          </button>
+
+          <!-- Contenido del slide -->
+          <div class="w-full grid grid-cols-1 md:grid-cols-2">
+            <!-- Imagen -->
+            <div class="relative min-h-[260px] md:min-h-[360px]" id="prodImgWrapper">
+              <img
+                id="prodImagen"
+                src="https://images.pexels.com/photos/1126993/pexels-photo-1126993.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Producto destacado"
+                class="w-full h-full object-cover"
+              />
+            </div>
+
+            <!-- Texto -->
+            <div class="flex flex-col justify-center px-10 py-12 md:py-16">
+              <p
+                id="prodCategoria"
+                class="tracking-[0.3em] text-xs text-gray-500 uppercase mb-3"
+              >
+                Selección Frices
+              </p>
+              <h3
+                id="prodNombre"
+                class="text-2xl md:text-3xl font-semibold mb-3"
+              >
+                Nombre del producto
+              </h3>
+              <p
+                id="prodDescripcion"
+                class="text-sm md:text-base text-gray-700 mb-4 leading-relaxed"
+              >
+                Descripción breve del producto. Ideal para looks chic y combinar
+                con todo tu guardarropa.
+              </p>
+              <p id="prodPrecio" class="text-lg font-semibold text-[#8a555b] mb-6">
+                $0.00 MXN
+              </p>
+              <div class="flex gap-3">
+                <button
+                  id="prodVerBtn"
+                  class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#8a555b] text-white text-sm md:text-base font-medium hover:bg-[#74444a] transition"
+                >
+                  Ver producto
+                </button>
+                <button
+                  id="prodAgregarBtn"
+                  class="inline-flex items-center justify-center px-6 py-3 rounded-full border border-[#8a555b] text-[#8a555b] text-sm md:text-base font-medium hover:bg-[#8a555b] hover:text-white transition"
+                >
+                  Agregar al carrito
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón siguiente -->
+          <button
+            id="prodNext"
+            class="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-md hover:bg-gray-100 absolute right-4 z-20 top-1/2 -translate-y-1/2"
+          >
+            ❯
+          </button>
+        </div>
+
+        <!-- Puntos del slider (opcional) -->
+        <div id="prodDots" class="flex justify-center gap-2 py-4"></div>
+      </div>
+    </section>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-20 bg-[#b89a8c] text-white">
+    <div class="max-w-6xl mx-auto px-4 md:px-0 py-12 grid grid-cols-1 md:grid-cols-4 gap-10 text-sm">
+
+      <!-- Menú -->
+      <div>
+        <h4 class="font-semibold tracking-wide mb-3 uppercase text-xs">
+          Menú
+        </h4>
+        <ul class="space-y-2">
+          <li><a href="#top" class="hover:underline">Inicio</a></li>
+          <li><a href="#categorias" class="hover:underline">Categorías</a></li>
+          <li><a href="#como-ser-distribuidora" class="hover:underline">¿Cómo ser distribuidora?</a></li>
+        </ul>
+      </div>
+
+      <!-- Preguntas frecuentes -->
+      <div>
+        <h4 class="font-semibold tracking-wide mb-3 uppercase text-xs">
+          Preguntas frecuentes FQA
+        </h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:underline">Preguntas frecuentes</a></li>
+        </ul>
+      </div>
+
+      <!-- Políticas -->
+      <div>
+        <h4 class="font-semibold tracking-wide mb-3 uppercase text-xs">
+          Políticas
+        </h4>
+        <ul class="space-y-2">
+          <li><a href="#" class="hover:underline">Política de reembolso</a></li>
+          <li><a href="#" class="hover:underline">Política de envíos</a></li>
+          <li><a href="#" class="hover:underline">Política de privacidad</a></li>
+          <li><a href="#" class="hover:underline">Términos del servicio</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h4 class="font-semibold tracking-wide mb-3 uppercase text-xs">
+          Suscríbete a nuestro newsletter
+        </h4>
+        <form class="flex mt-2 max-w-xs">
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            class="flex-1 px-3 py-2 rounded-l-md text-gray-800 text-sm outline-none"
+          />
+          <button
+            type="submit"
+            class="px-4 py-2 rounded-r-md bg-[#8a555b] hover:bg-[#74444a] text-white text-sm"
+          >
+            →
+          </button>
+        </form>
+
+        <div class="mt-6">
+          <p class="text-xs mb-2">Contáctanos</p>
+          <div class="flex items-center gap-3 text-lg">
+            <a href="#" class="hover:opacity-80">📘</a>
+            <a href="#" class="hover:opacity-80">📸</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/20">
+      <div class="max-w-6xl mx-auto px-4 md:px-0 py-4 text-xs md:text-sm flex flex-col md:flex-row justify-between gap-2 text-white/90">
+        <span>info@accesoriosfrices.com</span>
+        <span>© 2025 Accesorios Frices. Todos los derechos reservados.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS del cliente -->
+  <!-- Ajusta la ruta según tu estructura: si el archivo está en public/js/cliente.js, esta ruta está bien -->
+  <script src="/static/js/cliente.js"></script>
+</body>
+</html>

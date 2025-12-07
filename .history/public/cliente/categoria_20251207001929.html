@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Colección - Accesorios Frices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- ============================ BARRA SUPERIOR ============================= -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto py-2 px-4 text-center">
+      ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+    </div>
+  </div>
+
+  <!-- ============================ NAVBAR SIMPLE ============================= -->
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-4">
+      <a href="/static/cliente/cliente.html" class="text-sm underline">
+        ← Volver a categorías
+      </a>
+      <h1 id="tituloCategoria" class="text-lg font-semibold">
+        Colección
+      </h1>
+      <div></div>
+    </nav>
+  </header>
+
+  <!-- ============================ CONTENIDO ============================= -->
+  <main class="max-w-6xl mx-auto px-4 mt-8 mb-12">
+
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="subtitulo" class="text-2xl font-semibold">
+        Productos
+      </h2>
+
+      <!-- (Opcional) placeholder para filtros -->
+ <button
+  id="filterOpenBtn"
+  class="text-xs px-3 py-1 rounded-full border border-gray-300"
+>
+  Filtrar y ordenar
+</button>
+
+
+    <!-- GRID DE PRODUCTOS -->
+    <div id="gridProductos"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Aquí se insertan las tarjetas de productos desde cliente-cate.js -->
+    </div>
+
+  </main>
+
+  <!-- JS QUE CARGA LA COLECCIÓN -->
+  <script src="/static/js/cliente-cate.js"></script>
+<!-- PANEL DE FILTRO -->
+<div
+  id="filterPanel"
+  class="fixed inset-0 bg-black/30 hidden z-40"
+>
+  <div
+    class="ml-auto h-full w-full max-w-sm bg-white shadow-xl flex flex-col"
+  >
+    <!-- Header -->
+    <div class="px-4 py-3 border-b flex items-center justify-between">
+      <h2 class="text-sm font-semibold">Filtrar y ordenar</h2>
+      <button id="filterCloseBtn" class="text-xl leading-none">&times;</button>
+    </div>
+
+    <!-- Contenido -->
+    <div class="p-4 space-y-6 text-sm">
+
+      <!-- En existencia -->
+      <div class="flex items-center justify-between">
+        <span>En existencia</span>
+        <label class="inline-flex items-center cursor-pointer">
+          <input id="filterEnStock" type="checkbox" class="sr-only peer" />
+          <div
+            class="w-9 h-5 bg-gray-200 peer-checked:bg-[#8a555b] rounded-full peer transition"
+          >
+            <div
+              class="w-4 h-4 bg-white rounded-full shadow -translate-y-[2px] translate-x-[2px] peer-checked:translate-x-[18px] transition"
+            ></div>
+          </div>
+        </label>
+      </div>
+
+      <!-- Precio -->
+      <div>
+        <p class="font-medium mb-2">Precio</p>
+        <div class="flex items-center gap-2">
+          <input
+            id="filterMinPrice"
+            type="number"
+            step="0.01"
+            placeholder="Mín"
+            class="w-1/2 border rounded-lg px-2 py-1 text-xs"
+          />
+          <span>-</span>
+          <input
+            id="filterMaxPrice"
+            type="number"
+            step="0.01"
+            placeholder="Máx"
+            class="w-1/2 border rounded-lg px-2 py-1 text-xs"
+          />
+        </div>
+      </div>
+
+      <!-- Ordenar por -->
+      <div>
+        <p class="font-medium mb-2">Ordenar por:</p>
+        <select
+          id="filterSort"
+          class="w-full border rounded-lg px-2 py-1 text-xs"
+        >
+          <option value="">Características</option>
+          <option value="mas-vendidos">Más vendidos</option>
+          <option value="nombre-asc">Alfabéticamente, A-Z</option>
+          <option value="nombre-desc">Alfabéticamente, Z-A</option>
+          <option value="precio-asc">Precio, menor a mayor</option>
+          <option value="precio-desc">Precio, mayor a menor</option>
+          <option value="fecha-asc">Fecha: antiguo(a) a reciente</option>
+          <option value="fecha-desc">Fecha: reciente a antiguo(a)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Footer botones -->
+    <div class="mt-auto px-4 py-3 border-t flex gap-3 text-xs">
+      <button
+        id="filterClearBtn"
+        class="flex-1 border rounded-full px-3 py-2 hover:bg-gray-50"
+      >
+        Borrar filtros
+      </button>
+      <button
+        id="filterApplyBtn"
+        class="flex-1 bg-[#8a555b] text-white rounded-full px-3 py-2 hover:bg-[#703f45]"
+      >
+        Aplicar
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

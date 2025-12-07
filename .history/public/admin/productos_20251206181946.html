@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Productos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+    <!-- NAVBAR -->
+    <header class="bg-[#8a555b] text-white">
+        <div class="max-w-6xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
+            <a href="/static/admin/admin.html" class="underline text-sm justify-self-start">
+                ← Volver
+            </a>
+
+            <h1 class="text-lg font-semibold text-center">
+                Productos
+            </h1>
+
+            <!-- Columna vacía solo para equilibrar el grid -->
+            <div></div>
+        </div>
+    </header>
+
+
+    <main class="max-w-[1600px] mx-auto px-4 py-8 space-y-8">
+        <div id="adminMessage" class="text-sm"></div>
+
+        <!-- LISTADO + BOTÓN NUEVO -->
+        <section class="bg-white p-6 rounded-2xl shadow">
+            <div class="flex items-center justify-between mb-3">
+                <h2 class="font-semibold">Listado de productos</h2>
+                <button id="btnNuevoProducto"
+                    class="px-4 py-2 rounded-xl bg-[#8a555b] text-white text-sm hover:bg-[#73444a] transition">
+                    + Nuevo producto
+                </button>
+            </div>
+
+            <!-- SOLO SCROLL VERTICAL -->
+            <div class="max-h-[420px] overflow-y-auto">
+                <table class="w-full text-sm">
+                    <thead class="border-b">
+                        <tr>
+                            <th class="py-2 px-3 text-center">ID</th>
+                            <th class="py-2 px-3 text-center">Nombre</th>
+                            <th class="py-2 px-3 text-center">Descripción</th>
+                            <th class="py-2 px-3 text-center">Categoría</th>
+                            <th class="py-2 px-3 text-center">Precio</th>
+                            <th class="py-2 px-3 text-center">Stock</th>
+                            <th class="py-2 px-3 text-center">Destacado</th>
+
+                            <!-- NUEVAS COLUMNAS -->
+                            <th class="py-2 px-3 text-center">Tipo pieza</th>
+                            <th class="py-2 px-3 text-center">Material</th>
+                            <th class="py-2 px-3 text-center">Color</th>
+                            <th class="py-2 px-3 text-center">Hipoalergénico</th>
+                            <th class="py-2 px-3 text-center">Ajustable</th>
+                            <th class="py-2 px-3 text-center">Largo (cm)</th>
+                            <th class="py-2 px-3 text-center">Activo</th>
+                            <!-- FIN NUEVAS COLUMNAS -->
+
+                            <th class="py-2 px-3 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProductos"></tbody>
+                </table>
+            </div>
+        </section>
+
+
+    </main>
+
+    <!-- MODAL PRODUCTO -->
+    <div id="modalProducto" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl shadow-lg w-full max-w-4xl p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between mb-4">
+                <h2 id="modalProdTitle" class="font-semibold text-lg">
+                    Nuevo producto
+                </h2>
+                <button id="btnCerrarModalProd" class="text-gray-500 hover:text-gray-700 text-2xl leading-none">
+                    &times;
+                </button>
+            </div>
+
+            <!-- FORMULARIO DENTRO DEL MODAL (MISMO QUE TENÍAS) -->
+            <section>
+                <form id="productoForm" class="grid gap-4 md:grid-cols-4 items-end">
+                    <input type="hidden" id="prodId" />
+
+                    <div>
+                        <label class="text-sm">Nombre</label>
+                        <input id="prodNombre" class="w-full border rounded-xl px-3 py-2 text-sm" required />
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Descripción</label>
+                        <input id="prodDescripcion" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Precio (MXN)</label>
+                        <input id="prodPrecio" type="number" step="0.01" min="0"
+                            class="w-full border rounded-xl px-3 py-2 text-sm" required />
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Categoría</label>
+                        <select id="prodCategoria" class="w-full border rounded-xl px-3 py-2 text-sm" required>
+                            <option value="">Selecciona una categoría</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Stock</label>
+                        <input id="prodStock" type="number" min="0"
+                            class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+
+                    <!-- NUEVOS CAMPOS -->
+                    <div>
+                        <label class="text-sm">Tipo de pieza</label>
+                        <input id="prodTipoPieza" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Material</label>
+                        <input id="prodMaterial" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Color principal</label>
+                        <input id="prodColorPrincipal" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+                    <!-- FIN NUEVOS CAMPOS -->
+
+                    <div class="md:col-span-2">
+                        <label class="text-sm">Imagen</label>
+                        <input id="prodImagen" name="imagen" type="file" accept="image/*"
+                            class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input id="prodDestacado" type="checkbox" class="w-4 h-4" />
+                        <label class="text-sm">Destacado</label>
+                    </div>
+
+                    <!-- NUEVOS CHECKBOXES -->
+                    <div class="flex items-center gap-2">
+                        <input id="prodHipoalergenico" type="checkbox" class="w-4 h-4" />
+                        <label class="text-sm">Hipoalergénico</label>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input id="prodAjustable" type="checkbox" class="w-4 h-4" />
+                        <label class="text-sm">Ajustable</label>
+                    </div>
+
+                    <div>
+                        <label class="text-sm">Largo (cm)</label>
+                        <input id="prodLargoCm" type="number" min="0" step="0.01"
+                            class="w-full border rounded-xl px-3 py-2 text-sm" />
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input id="prodActivo" type="checkbox" class="w-4 h-4" checked />
+                        <label class="text-sm">Activo</label>
+                    </div>
+                    <!-- FIN NUEVOS CHECKBOXES -->
+
+                    <div class="flex gap-2 md:justify-end md:col-span-4 mt-2">
+                        <button class="px-4 py-2 rounded-xl bg-[#8a555b] text-white text-sm">
+                            Guardar
+                        </button>
+                        <button id="btnResetForm" type="button" class="px-4 py-2 rounded-xl border text-sm">
+                            Limpiar
+                        </button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script src="/static/js/productos.js"></script>
+
+</body>
+
+</html>

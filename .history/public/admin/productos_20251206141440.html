@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Productos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+    <!-- NAVBAR -->
+    <header class="bg-[#8a555b] text-white">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="/static/admin/admin.html" class="underline text-sm">← Volver</a>
+            <h1 class="text-lg font-semibold">Productos</h1>
+            <button id="btnLogout" class="px-3 py-1 border rounded-lg">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        <div id="adminMessage" class="text-sm"></div>
+
+        <!-- FORMULARIO -->
+        <section class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="font-semibold mb-3">Agregar / Editar producto</h2>
+
+            <form id="productoForm" class="grid gap-4 md:grid-cols-4 items-end">
+                <input type="hidden" id="prodId" />
+
+                <div>
+                    <label class="text-sm">Nombre</label>
+                    <input id="prodNombre" class="w-full border rounded-xl px-3 py-2 text-sm" required />
+                </div>
+
+                <div>
+                    <label class="text-sm">Descripción</label>
+                    <input id="prodDescripcion" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                </div>
+
+                <div>
+                    <label class="text-sm">Precio (MXN)</label>
+                    <input id="prodPrecio" type="number" step="0.01" min="0"
+                        class="w-full border rounded-xl px-3 py-2 text-sm" required />
+                </div>
+
+                <div>
+                    <label class="text-sm">Categoría</label>
+                    <select id="prodCategoria" class="w-full border rounded-xl px-3 py-2 text-sm" required>
+                        <option value="">Selecciona una categoría</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="text-sm">Stock</label>
+                    <input id="prodStock" type="number" min="0" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="text-sm">URL de imagen</label>
+                    <input id="prodImagen" type="file" accept="image/*" class="w-full border rounded-xl px-3 py-2 text-sm" />
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <input id="prodDestacado" type="checkbox" class="w-4 h-4" />
+                    <label class="text-sm">Destacado</label>
+                </div>
+
+                <div class="flex gap-2 md:justify-end">
+                    <button class="px-4 py-2 rounded-xl bg-[#8a555b] text-white text-sm">
+                        Guardar
+                    </button>
+                    <button id="btnResetForm" type="button" class="px-4 py-2 rounded-xl border text-sm">
+                        Limpiar
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- TABLA -->
+        <section class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="font-semibold mb-3">Listado de productos</h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="border-b">
+                        <tr>
+                            <th class="py-2 text-left">ID</th>
+                            <th class="py-2 text-left">Nombre</th>
+                            <th class="py-2 text-left">Categoría</th>
+                            <th class="py-2 text-left">Precio</th>
+                            <th class="py-2 text-left">Stock</th>
+                            <th class="py-2 text-left">Destacado</th>
+                            <th class="py-2 text-left">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaProductos"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/productos.js"></script>
+
+</body>
+
+</html>

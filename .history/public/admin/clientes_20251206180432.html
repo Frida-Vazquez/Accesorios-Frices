@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Clientes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+    <!-- NAVBAR -->
+    <header class="bg-[#8a555b] text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
+
+        <!-- Volver -->
+        <a href="/static/admin/admin.html" class="underline text-sm justify-self-start">
+            ← Volver
+        </a>
+
+        <!-- Título centrado -->
+        <h1 class="text-lg font-semibold text-center">
+            Clientes
+        </h1>
+
+        <!-- Columna vacía para equilibrar -->
+        <div></div>
+
+    </div>
+</header>
+
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-6">
+        <div id="adminMessage" class="text-sm"></div>
+
+        <!-- LISTADO -->
+        <section class="bg-white p-6 rounded-2xl shadow">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="font-semibold">Listado de clientes</h2>
+                <button id="btnNuevoCliente"
+                    class="px-3 py-1 rounded-lg text-sm bg-[#8a555b] text-white hover:bg-[#6d4247]">
+                    + Nuevo cliente
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-slate-50">
+                        <tr class="text-left">
+                            <th class="px-3 py-2">ID</th>
+                            <th class="px-3 py-2">Nombre</th>
+                            <th class="px-3 py-2">Email</th>
+                            <th class="px-3 py-2">Teléfono</th>
+                            <th class="px-3 py-2">Activo</th>
+                            <th class="px-3 py-2">Creado</th>
+                            <th class="px-3 py-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientesTbody" class="divide-y divide-slate-100">
+                        <!-- Filas desde JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========== MODAL CLIENTE ========== -->
+    <div id="clienteModal" class="fixed inset-0 z-40 flex items-center justify-center hidden">
+        <!-- fondo -->
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" data-close-modal></div>
+
+        <!-- cuadro -->
+        <div class="relative bg-[#fff5e4] rounded-3xl shadow-[0_18px_40px_rgba(0,0,0,0.35)]
+              w-full max-w-lg p-6 space-y-4">
+            <h3 id="clienteModalTitle" class="text-lg font-semibold text-slate-800">
+                Nuevo cliente
+            </h3>
+
+            <form id="clienteForm" class="space-y-4">
+                <input type="hidden" id="clienteId" />
+
+                <!-- Nombre -->
+                <div class="space-y-1">
+                    <label for="clienteNombre" class="block text-sm font-medium text-slate-700">
+                        Nombre
+                    </label>
+                    <input id="clienteNombre" type="text" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-[#8a555b]/60" />
+                </div>
+
+                <!-- Email -->
+                <div class="space-y-1">
+                    <label for="clienteEmail" class="block text-sm font-medium text-slate-700">
+                        Email
+                    </label>
+                    <input id="clienteEmail" type="email" required class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-[#8a555b]/60" />
+                </div>
+
+                <!-- Teléfono -->
+                <div class="space-y-1">
+                    <label for="clienteTelefono" class="block text-sm font-medium text-slate-700">
+                        Teléfono
+                    </label>
+                    <input id="clienteTelefono" type="text" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-[#8a555b]/60" />
+                </div>
+
+                <!-- Contraseña (solo para nuevo cliente) -->
+                <div class="space-y-1">
+                    <label for="clientePassword" class="block text-sm font-medium text-slate-700">
+                        Contraseña
+                    </label>
+                    <input id="clientePassword" type="password" class="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-[#8a555b]/60" />
+                    <p class="text-[11px] text-slate-500">
+                        Para clientes nuevos es obligatoria. Al editar puedes dejarla vacía si no quieres cambiarla.
+                    </p>
+                </div>
+
+                <!-- Activo -->
+                <div class="flex items-center gap-2">
+                    <input id="clienteActivo" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-[#8a555b]
+                      focus:ring-[#8a555b]/60" />
+                    <label for="clienteActivo" class="text-sm text-slate-700">
+                        Cliente activo
+                    </label>
+                </div>
+
+                <!-- BOTONES -->
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" data-close-modal class="px-3 py-1 rounded-lg text-sm border border-slate-300
+                       hover:bg-slate-50">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-1.5 rounded-lg text-sm bg-[#8a555b] text-white
+                       hover:bg-[#6d4247]">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/clientes-admin.js"></script>
+</body>
+
+</html>

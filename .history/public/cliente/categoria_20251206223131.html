@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Colección - Accesorios Frices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- ============================ BARRA SUPERIOR ============================= -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto py-2 px-4 text-center">
+      ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+    </div>
+  </div>
+
+  <!-- ============================ NAVBAR SIMPLE ============================= -->
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-4">
+      <a href="/static/cliente/cliente.html" class="text-sm underline">
+        ← Volver a categorías
+      </a>
+      <h1 id="tituloCategoria" class="text-lg font-semibold">
+        Colección
+      </h1>
+      <div></div>
+    </nav>
+  </header>
+
+  <!-- ============================ CONTENIDO ============================= -->
+  <main class="max-w-6xl mx-auto px-4 mt-8 mb-12">
+
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="subtitulo" class="text-2xl font-semibold">
+        Productos
+      </h2>
+
+      <!-- (Opcional) placeholder para filtros -->
+      <button class="text-xs px-3 py-1 rounded-full border border-gray-300">
+        Filtar y ordenar
+      </button>
+    </div>
+
+    <!-- GRID DE PRODUCTOS -->
+    <div id="gridProductos"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Aquí se insertan las tarjetas de productos desde cliente-cate.js -->
+    </div>
+
+  </main>
+
+  <!-- JS QUE CARGA LA COLECCIÓN -->
+  <script src="/static/js/cliente-cate.js"></script>
+</body>
+
+</html>

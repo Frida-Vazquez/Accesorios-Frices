@@ -1,0 +1,223 @@
+// public/js/categorias.js
+
+// Usamos el token del mismo proyecto; si no existe, redirigimos a login.
+const API_ROOT = typeof API_BASE !== "undefined" ? API_BASE : "/api";
+const TOKEN_KEY = "frices_token";
+
+// ==== Helpers básicos (por si admin.js no los define aquí) ====
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+function clearSession() {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+function authHeader() {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+function setMessage(msg, type = "success") {
+  const box = document.getElementById("adminMessage");
+  if (!box) return;
+
+  box.textContent = msg || "";
+  box.className = type === "error" ? "text-red-600" : "text-green-600";
+
+  if (msg) {
+    setTimeout(() => {
+      box.textContent = "";
+      box.className = "";
+    }, 3000);
+  }
+}
+
+function handleAuthError() {
+  alert("Tu sesión ha expirado o no es válida.");
+  clearSession();
+  window.location.href = "/login";
+}
+
+// ==== Lógica principal de categorías ====
+document.addEventListener("DOMContentLoaded", () => {
+  // 1) Validar sesión
+  if (!getToken()) {
+    return handleAuthError();
+  }
+
+  // 2) Elementos del DOM
+  const form = document.getElementById("categoriaForm");
+  const catIdInput = document.getElementById("catId");
+  const catNombreInput = document.getElementById("catNombre");
+  const catDescripcionInput = document.getElementById("catDescripcion");
+  const resetBtn = document.getElementById("btnResetForm");
+  const tbody = document.getElementById("tablaCategorias");
+  const btnLogout = document.getElementById("btnLogout");
+
+  if (!form || !tbody) {
+    console.error("⚠ No se encontró el formulario o la tabla de categorías");
+    return;
+  }
+
+  // 3) Logout (por si admin.js no lo enganchó)
+  if (btnLogout) {
+    btnLogout.addEventListener("click", () => {
+      clearSession();
+      window.location.href = "/login";
+    });
+  }
+
+  // --- Función para obtener arreglo de la respuesta ---
+  function normalizeCategoriasResponse(data) {
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.categorias)) return data.categorias;
+    if (Array.isArray(data.data)) return data.data;
+    return [];
+  }
+
+  // --- Cargar categorías ---
+  async function loadCategorias() {
+    try {
+      console.log("→ Cargando categorías desde:", `${API_ROOT}/categorias`);
+      const res = await fetch(`${API_ROOT}/categorias`, {
+        headers: authHeader(),
+      });
+
+      console.log("Status GET /categorias:", res.status);
+
+      if (res.status === 401) return handleAuthError();
+      if (!res.ok) {
+        console.error("Error al cargar categorías:", res.status);
+        setMessage("Error al cargar categorías", "error");
+        return;
+      }
+
+      const raw = await res.json();
+      console.log("Respuesta cruda /categorias:", raw);
+
+      const lista = normalizeCategoriasResponse(raw);
+      console.log("Lista normalizada de categorías:", lista);
+
+      tbody.innerHTML = "";
+
+      lista.forEach((c) => {
+        const tr = document.createElement("tr");
+        tr.className = "border-b";
+
+        tr.innerHTML = `
+          <td class="py-2">${c.id}</td>
+          <td class="py-2">${c.nombre}</td>
+          <td class="py-2">${c.descripcion || ""}</td>
+          <td class="py-2 flex gap-2">
+            <button class="edit px-3 py-1 border rounded" data-id="${c.id}">Editar</button>
+            <button class="delete px-3 py-1 border border-red-400 text-red-600 rounded" data-id="${c.id}">Eliminar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Eventos de editar / eliminar
+      document.querySelectorAll(".edit").forEach((btn) =>
+        btn.addEventListener("click", () => editCategoria(btn.dataset.id, lista))
+      );
+
+      document.querySelectorAll(".delete").forEach((btn) =>
+        btn.addEventListener("click", () => deleteCategoria(btn.dataset.id))
+      );
+    } catch (err) {
+      console.error("Error en loadCategorias:", err);
+      setMessage("Error al cargar categorías (revisa consola)", "error");
+    }
+  }
+
+  function editCategoria(id, categorias) {
+    const cat = categorias.find((c) => c.id == id);
+    if (!cat) return;
+
+    catIdInput.value = cat.id;
+    catNombreInput.value = cat.nombre;
+    catDescripcionInput.value = cat.descripcion || "";
+  }
+
+  async function deleteCategoria(id) {
+    if (!confirm("¿Eliminar categoría?")) return;
+
+    try {
+      const res = await fetch(`${API_ROOT}/categorias/${id}`, {
+        method: "DELETE",
+        headers: authHeader(),
+      });
+
+      console.log("Status DELETE /categorias/:id", res.status);
+
+      if (res.status === 401) return handleAuthError();
+      if (!res.ok) {
+        setMessage("Error al eliminar categoría", "error");
+        return;
+      }
+
+      setMessage("Categoría eliminada");
+      loadCategorias();
+    } catch (err) {
+      console.error("Error en deleteCategoria:", err);
+      setMessage("Error al eliminar categoría", "error");
+    }
+  }
+
+  // --- Guardar (crear/editar) ---
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const id = catIdInput.value;
+    const body = {
+      nombre: catNombreInput.value.trim(),
+      descripcion: catDescripcionInput.value.trim(),
+    };
+
+    console.log("→ Enviando categoría", { id, body });
+
+    try {
+      const url = `${API_ROOT}/categorias${id ? "/" + id : ""}`;
+      const method = id ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          ...authHeader(),
+        },
+        body: JSON.stringify(body),
+      });
+
+      console.log(`${method} ${url} status:`, res.status);
+
+      if (res.status === 401) return handleAuthError();
+      if (!res.ok) {
+        const errText = await res.text().catch(() => "");
+        console.error("Error al guardar categoría:", res.status, errText);
+        setMessage("Error al guardar categoría", "error");
+        return;
+      }
+
+      setMessage("Categoría guardada correctamente");
+      form.reset();
+      catIdInput.value = "";
+      loadCategorias();
+    } catch (err) {
+      console.error("Error en submit de categoría:", err);
+      setMessage("Error al guardar categoría", "error");
+    }
+  });
+
+  // --- Limpiar ---
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      catIdInput.value = "";
+      form.reset();
+    });
+  }
+
+  // --- Cargar al entrar ---
+  loadCategorias();
+});
