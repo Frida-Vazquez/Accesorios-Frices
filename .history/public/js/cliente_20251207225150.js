@@ -232,17 +232,12 @@ async function loadProductosSlider() {
       });
     }
 
+
+
     if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
-
-        if (!prod || !prod.id) {
-          alert("No se pudo identificar el producto.");
-          return;
-        }
-
-        // 🔐 Aquí ya se valida sesión y se llama al backend
-        agregarAlCarrito(prod.id, 1);
+        alert("Aquí agregarías al carrito el producto ID " + prod.id);
       });
     }
   } catch (err) {
@@ -386,6 +381,12 @@ async function agregarAlCarrito(productoId, cantidad = 1) {
   }
 }
 
+// ================== CARRITO - CONTADOR NAVBAR ==================
+async function updateCartCounter() {
+  const badge = document.getElementById("cartCounter");
+  if (!badge) return;
+  // ... lo demás TAL CUAL lo tienes
+}
 
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {

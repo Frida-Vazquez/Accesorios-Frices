@@ -232,7 +232,7 @@ async function loadProductosSlider() {
       });
     }
 
-    if (agregarBtn) {
+        if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
 
@@ -241,14 +241,10 @@ async function loadProductosSlider() {
           return;
         }
 
-        // 🔐 Aquí ya se valida sesión y se llama al backend
+        // Ahora sí usamos la función con validación de sesión
         agregarAlCarrito(prod.id, 1);
       });
     }
-  } catch (err) {
-    console.error("Error cargando productos slider:", err);
-  }
-}
 
 
 
@@ -386,6 +382,12 @@ async function agregarAlCarrito(productoId, cantidad = 1) {
   }
 }
 
+// ================== CARRITO - CONTADOR NAVBAR ==================
+async function updateCartCounter() {
+  const badge = document.getElementById("cartCounter");
+  if (!badge) return;
+  // ... lo demás TAL CUAL lo tienes
+}
 
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {

@@ -386,6 +386,12 @@ async function agregarAlCarrito(productoId, cantidad = 1) {
   }
 }
 
+// ================== CARRITO - CONTADOR NAVBAR ==================
+async function updateCartCounter() {
+  const badge = document.getElementById("cartCounter");
+  if (!badge) return;
+  // ... lo demás TAL CUAL lo tienes
+}
 
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {

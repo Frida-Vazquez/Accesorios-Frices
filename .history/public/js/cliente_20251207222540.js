@@ -133,11 +133,11 @@ function renderProductoSlide() {
   const nombre = prod.nombre || "Producto destacado";
   const desc = prod.descripcion || "Descubre esta pieza seleccionada especialmente para ti.";
   const imagen =
-    prod.url_imagen ||   // 👈 ESTE es el nombre correcto del campo en tu BD
-    prod.imagen_url ||
-    prod.imagen ||
-    prod.foto ||
-    "https://via.placeholder.com/800x800?text=Producto";
+  prod.url_imagen ||   // 👈 ESTE es el nombre correcto del campo en tu BD
+  prod.imagen_url ||
+  prod.imagen ||
+  prod.foto ||
+  "https://via.placeholder.com/800x800?text=Producto";
 
   const precio =
     prod.precio != null ? `$${Number(prod.precio).toFixed(2)} MXN` : "";
@@ -232,17 +232,17 @@ async function loadProductosSlider() {
       });
     }
 
+    if (verBtn) {
+      verBtn.addEventListener("click", () => {
+        const prod = productosSlider[prodIndex];
+        alert("Aquí iría la vista detalle del producto ID " + prod.id);
+      });
+    }
+
     if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
-
-        if (!prod || !prod.id) {
-          alert("No se pudo identificar el producto.");
-          return;
-        }
-
-        // 🔐 Aquí ya se valida sesión y se llama al backend
-        agregarAlCarrito(prod.id, 1);
+        alert("Aquí agregarías al carrito el producto ID " + prod.id);
       });
     }
   } catch (err) {
@@ -251,7 +251,7 @@ async function loadProductosSlider() {
 }
 
 
-
+// ========== MENÚ DEL USUARIO (CLIENTE) ==========
 // ========== MENÚ DEL USUARIO (CLIENTE) ==========
 function initUserMenu() {
   const userMenuBtn = document.getElementById("userMenuBtn");
@@ -341,48 +341,6 @@ function updateFavCountBadge() {
     badge.classList.remove("hidden");
   } else {
     badge.classList.add("hidden");
-  }
-}
-
-// ================== CARRITO - AGREGAR PRODUCTO ==================
-async function agregarAlCarrito(productoId, cantidad = 1) {
-  const token = getClienteToken();
-  const sessionActiva = isClienteSessionActive();
-
-  // 1. Validar que el cliente haya iniciado sesión
-  if (!token || !sessionActiva) {
-    const ir = confirm(
-      "Debes iniciar sesión para agregar productos al carrito. ¿Quieres ir al login ahora?"
-    );
-    if (ir) {
-      // Ajusta la ruta si tu login está en otro lado
-      window.location.href = "/static/auth/login.html";
-    }
-    return; // 👈 muy importante: no seguimos si no hay sesión
-  }
-
-  // 2. Si SÍ hay sesión, mandamos la petición al backend
-  try {
-    const resp = await fetch(`${API_URL}/carrito/agregar`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...authHeader(), // manda el token en el header
-      },
-      body: JSON.stringify({ productoId, cantidad }),
-    });
-
-    if (!resp.ok) {
-      throw new Error("No se pudo agregar al carrito");
-    }
-
-    await resp.json();
-    alert("Producto agregado al carrito ✨");
-    // Actualizamos el contador del carrito en la navbar
-    updateCartCounter();
-  } catch (err) {
-    console.error("Error al agregar al carrito:", err);
-    alert("Hubo un problema al agregar el producto al carrito.");
   }
 }
 
