@@ -1,6 +1,5 @@
 node_modules
 .env
-
 # Carpetas de imágenes
 uploads/
 public/uploads/
