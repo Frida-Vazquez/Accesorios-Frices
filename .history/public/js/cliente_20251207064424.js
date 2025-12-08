@@ -7,7 +7,6 @@ const API_URL = "/api";
 const CLIENTE_TOKEN_KEY = "frices_token";
 const CLIENTE_NOMBRE_KEY = "cliente_nombre";
 
-
 // ================== SESIÓN CLIENTE ==================
 function getClienteToken() {
   return localStorage.getItem(CLIENTE_TOKEN_KEY);
@@ -23,6 +22,10 @@ function clearClienteSession() {
   localStorage.removeItem("cliente_token"); // por si acaso
 }
 
+function authHeader() {
+  const token = getClienteToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 // ================== HELPER RESPUESTAS ==================
 function parseData(resp) {
@@ -31,9 +34,7 @@ function parseData(resp) {
   return [];
 }
 
-
 // ================== CARGAR CATEGORÍAS ==================
-// Función para generar un slug a partir del nombre
 function slugify(nombre) {
   return nombre
     .toLowerCase()
@@ -43,7 +44,6 @@ function slugify(nombre) {
     .replace(/[^a-z0-9\-]/g, "");    // quita caracteres raros
 }
 
-// ================== CARGAR CATEGORÍAS ==================
 async function loadCategorias() {
   const grid = document.getElementById("categoriasGrid");
   if (!grid) return;
@@ -68,12 +68,13 @@ async function loadCategorias() {
       article.innerHTML = `
         <div class="w-full aspect-[4/5] overflow-hidden">
           <img
-            src="${cat.url_imagen ||
-        cat.imagen_url ||
-        cat.imagen ||
-        cat.foto ||
-        "https://via.placeholder.com/600x800?text=Categoria"
-        }"
+            src="${
+              cat.url_imagen ||
+              cat.imagen_url ||
+              cat.imagen ||
+              cat.foto ||
+              "https://via.placeholder.com/600x800?text=Categoria"
+            }"
             alt="${cat.nombre}"
             class="w-full h-full object-cover"
           />
@@ -94,13 +95,6 @@ async function loadCategorias() {
   }
 }
 
-
-// ================== INICIO ==================
-window.addEventListener("DOMContentLoaded", () => {
-  // aquí ya haces lo que tenías (saludo, user, etc.)
-  loadCategorias(); // 👈 asegúrate de llamarla
-});
-
 // ========== SLIDER DE PRODUCTOS DESDE LA BD ==========
 let productosSlider = [];
 let prodIndex = 0;
@@ -120,9 +114,14 @@ function renderProductoSlide() {
   const prod = productosSlider[prodIndex];
 
   const nombre = prod.nombre || "Producto destacado";
-  const desc = prod.descripcion || "Descubre esta pieza seleccionada especialmente para ti.";
+  const desc =
+    prod.descripcion ||
+    "Descubre esta pieza seleccionada especialmente para ti.";
   const imagen =
-    prod.imagen_url || prod.imagen || prod.foto || "https://via.placeholder.com/800x800?text=Producto";
+    prod.imagen_url ||
+    prod.imagen ||
+    prod.foto ||
+    "https://via.placeholder.com/800x800?text=Producto";
 
   const precio =
     prod.precio != null ? `$${Number(prod.precio).toFixed(2)} MXN` : "";
@@ -227,14 +226,13 @@ async function loadProductosSlider() {
     if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
-        alert("Aquí agregarías al carrito el producto ID " + prod.id);
+        agregarAlCarrito(prod.id); // 👈 ahora sí agrega al carrito real
       });
     }
   } catch (err) {
     console.error("Error cargando productos slider:", err);
   }
 }
-
 
 // ========== MENÚ DEL USUARIO (CLIENTE) ==========
 function initUserMenu() {
@@ -286,6 +284,165 @@ function initUserMenu() {
     window.location.href = "/static/cliente/cliente.html";
   });
 }
+
+// ========== CARRITO - PANEL LATERAL ==================
+
+// Abrir / cerrar panel
+function openCart() {
+  document.getElementById("cartOverlay")?.classList.remove("hidden");
+  document.getElementById("cartPanel")?.classList.remove("hidden");
+  cargarCarrito(); // cada vez que abres, refresca
+}
+
+function closeCart() {
+  document.getElementById("cartOverlay")?.classList.add("hidden");
+  document.getElementById("cartPanel")?.classList.add("hidden");
+}
+
+// Cargar carrito desde la API
+async function cargarCarrito() {
+  try {
+    const resp = await fetch(`${API_URL}/carrito`, {
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+    });
+
+    if (!resp.ok) throw new Error("Error al obtener carrito");
+
+    const data = await resp.json();
+    renderCart(data);
+  } catch (e) {
+    console.error(e);
+    const cont = document.getElementById("cartItems");
+    if (cont) cont.innerHTML = "<p>No se pudo cargar el carrito.</p>";
+  }
+}
+
+function renderCart(data) {
+  const cont = document.getElementById("cartItems");
+  const totalSpan = document.getElementById("cartTotal");
+  const badge = document.getElementById("cartCount");
+
+  if (!cont || !totalSpan || !badge) return;
+
+  cont.innerHTML = "";
+
+  if (!data || !data.items || data.items.length === 0) {
+    cont.innerHTML = "<p>Tu carrito está vacío.</p>";
+    totalSpan.textContent = "$0.00";
+    badge.textContent = "0";
+    return;
+  }
+
+  let total = 0;
+  let cantidadTotal = 0;
+
+  data.items.forEach((item) => {
+    const subtotal = item.cantidad * item.precio_unitario;
+    total += subtotal;
+    cantidadTotal += item.cantidad;
+
+    const div = document.createElement("div");
+    div.className = "flex gap-3 items-center";
+
+    div.innerHTML = `
+      <img src="${
+        item.producto_imagen ||
+        "https://via.placeholder.com/100x100?text=IMG"
+      }"
+           class="w-16 h-16 object-cover rounded-md border" />
+
+      <div class="flex-1">
+        <p class="font-medium">${item.producto_nombre}</p>
+        <p class="text-sm text-gray-500">Cantidad: ${item.cantidad}</p>
+        <p class="text-sm text-gray-500">Precio: $${item.precio_unitario}</p>
+        <p class="text-sm font-semibold mt-1">Subtotal: $${subtotal.toFixed(2)}</p>
+      </div>
+
+      <button class="text-red-600 text-sm"
+              onclick="eliminarItemCarrito(${item.id})">
+        🗑
+      </button>
+    `;
+
+    cont.appendChild(div);
+  });
+
+  totalSpan.textContent = `$${total.toFixed(2)}`;
+  badge.textContent = cantidadTotal;
+}
+
+async function eliminarItemCarrito(itemId) {
+  try {
+    const resp = await fetch(`${API_URL}/carrito/item/${itemId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+    });
+
+    if (!resp.ok) throw new Error("Error al eliminar producto");
+
+    await cargarCarrito();
+  } catch (e) {
+    console.error(e);
+    alert("No se pudo eliminar el producto.");
+  }
+}
+
+async function checkoutCarrito() {
+  try {
+    const resp = await fetch(`${API_URL}/carrito/checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+    });
+
+    if (!resp.ok) throw new Error("Error en checkout");
+
+    const data = await resp.json();
+    alert("Compra realizada con éxito ✨");
+    console.log("Pedido:", data);
+    cargarCarrito();
+  } catch (e) {
+    console.error(e);
+    alert("No se pudo finalizar la compra.");
+  }
+}
+
+// Agregar producto al carrito (slider y otras vistas)
+async function agregarAlCarrito(productoId) {
+  if (!getClienteToken()) {
+    alert("Debes iniciar sesión para agregar productos al carrito.");
+    return;
+  }
+
+  try {
+    const resp = await fetch(`${API_URL}/carrito/agregar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+      body: JSON.stringify({ productoId, cantidad: 1 }),
+    });
+
+    if (!resp.ok) throw new Error("No se pudo agregar al carrito");
+
+    const data = await resp.json();
+    alert("Producto agregado al carrito ✨");
+    renderCart(data); // actualiza panel y numerito
+  } catch (e) {
+    console.error(e);
+    alert("Ocurrió un error al agregar al carrito.");
+  }
+}
+
 // ================== FAVORITOS - CONTADOR NAVBAR ==================
 function getFavoritosLS() {
   try {
@@ -321,11 +478,31 @@ window.addEventListener("storage", (e) => {
   }
 });
 
-
 // ========== INIT AL CARGAR ==========
 document.addEventListener("DOMContentLoaded", () => {
   loadCategorias();
   loadProductosSlider();
   initUserMenu();
   updateFavCountBadge();
+
+  // Eventos del carrito
+  const btnOpenCart = document.getElementById("btnOpenCart");
+  const btnCloseCart = document.getElementById("btnCloseCart");
+  const overlay = document.getElementById("cartOverlay");
+  const btnCheckout = document.getElementById("btnCheckoutCart");
+
+  if (btnOpenCart) {
+    btnOpenCart.addEventListener("click", () => {
+      if (!getClienteToken()) {
+        alert("Debes iniciar sesión para ver tu carrito.");
+        // window.location.href = "/static/auth/login.html";
+        return;
+      }
+      openCart();
+    });
+  }
+
+  if (btnCloseCart) btnCloseCart.addEventListener("click", closeCart);
+  if (overlay) overlay.addEventListener("click", closeCart);
+  if (btnCheckout) btnCheckout.addEventListener("click", checkoutCarrito);
 });

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi carrito - Accesorios Frices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- BARRA SUPERIOR -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto py-2 px-4 text-center">
+      ✨ Revisa tu carrito antes de pagar ✨
+    </div>
+  </div>
+
+  <!-- NAVBAR SENCILLA (puedes copiar la de cliente.html si quieres) -->
+  <header class="bg-white shadow-sm">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/static/cliente/cliente.html" class="text-sm underline">
+        ← Seguir comprando
+      </a>
+      <span class="text-sm font-semibold text-[#8a555b]">
+        Mi carrito
+      </span>
+      <a href="/static/cliente/favoritos.html"
+         class="text-sm hover:text-[#8a555b]">
+        Mis favoritos
+      </a>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <h1 class="text-xl font-semibold mb-4 text-[#8a555b]">
+      Productos en tu carrito
+    </h1>
+
+    <p id="msgCarritoVacio" class="text-sm text-gray-600 mb-4 hidden">
+      Tu carrito está vacío. Agrega productos desde el inicio o las categorías.
+    </p>
+
+    <section class="grid gap-4 mb-6" id="gridCarrito">
+      <!-- Aquí se insertan las tarjetas desde carrito.js -->
+    </section>
+
+    <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3 border-t pt-4">
+      <p class="text-sm">
+        Total: <span id="totalCarrito" class="font-bold">$0.00 MXN</span>
+      </p>
+      <button
+        id="btnPagar"
+        class="px-6 py-2 rounded-full bg-[#8a555b] text-white text-sm font-semibold hover:bg-[#734348] transition">
+        Pagar
+      </button>
+    </div>
+  </main>
+
+  <!-- JS -->
+  <script src="/static/js/carrito.js"></script>
+</body>
+
+</html>

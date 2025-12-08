@@ -4,49 +4,43 @@ const CLIENTE_TOKEN_KEY = "frices_token";
 const FAVORITOS_KEY = "frices_favoritos"; // 👈 AGREGA ESTO
 
 function getClienteToken() {
-    return localStorage.getItem(CLIENTE_TOKEN_KEY);
+  return localStorage.getItem(CLIENTE_TOKEN_KEY);
 }
 
 function authHeader() {
-    const token = getClienteToken();
-    return token ? { Authorization: `Bearer ${token}` } : {};
+  const token = getClienteToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 async function agregarAlCarrito(productoId) {
-    if (!getClienteToken()) {
-        const ir = confirm(
-            "Debes iniciar sesión para agregar productos al carrito.\n¿Quieres ir a la página de inicio de sesión?"
-        );
-        if (ir) {
-            window.location.href = "/static/auth/login.html";
-        }
-        return;
+  if (!getClienteToken()) {
+    const ir = confirm(
+      "Debes iniciar sesión para agregar productos al carrito.\n¿Quieres ir a la página de inicio de sesión?"
+    );
+    if (ir) {
+      window.location.href = "/static/auth/login.html";
     }
+    return;
+  }
 
-    try {
-        const resp = await fetch(`${API_URL}/carrito/agregar`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                ...authHeader(),
-            },
-            body: JSON.stringify({ productoId, cantidad: 1 }),
-        });
+  try {
+    const resp = await fetch(`${API_URL}/carrito/agregar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+      body: JSON.stringify({ productoId, cantidad: 1 }),
+    });
 
-        const data = await resp.json();
+    if (!resp.ok) throw new Error("No se pudo agregar al carrito");
 
-        if (!resp.ok) {
-            // si viene mensaje claro desde el backend, lo mostramos
-            throw new Error(data?.message || "No se pudo agregar al carrito.");
-        }
-
-        alert("Producto agregado al carrito 🛒");
-    } catch (err) {
-        console.error("Error agregando al carrito:", err);
-        alert(err.message || "Ocurrió un error al agregar al carrito.");
-    }
+    alert("Producto agregado al carrito 🛒");
+  } catch (err) {
+    console.error("Error agregando al carrito:", err);
+    alert("Ocurrió un error al agregar al carrito.");
+  }
 }
-
 
 // /collections/aretes -> "aretes"
 const slugUrl = window.location.pathname.split("/").pop();
@@ -120,21 +114,21 @@ function renderProductos(lista) {
     const favs = getFavoritos();
 
     lista.forEach((p) => {
-        const card = document.createElement("article");
-        card.className =
-            "bg-white rounded-3xl shadow-sm overflow-hidden flex flex-col relative";
+  const card = document.createElement("article");
+  card.className =
+    "bg-white rounded-3xl shadow-sm overflow-hidden flex flex-col relative";
 
-        const imgSrc =
-            p.url_imagen ||
-            p.imagen_url ||
-            p.imagen ||
-            p.foto ||
-            "/static/assets/no-image.png";
+  const imgSrc =
+    p.url_imagen ||
+    p.imagen_url ||
+    p.imagen ||
+    p.foto ||
+    "/static/assets/no-image.png";
 
-        const precioNum = Number(p.precio || 0);
-        const esFav = favs.includes(p.id);
+  const precioNum = Number(p.precio || 0);
+  const esFav = favs.includes(p.id);
 
-        card.innerHTML = `
+  card.innerHTML = `
     <!-- BOTÓN FAVORITO -->
     <button
       type="button"
@@ -174,33 +168,33 @@ function renderProductos(lista) {
     </div>
   `;
 
-        // evento corazoncito (favoritos)
-        const favBtn = card.querySelector("[data-fav]");
-        if (favBtn) {
-            favBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                const nuevosFavs = toggleFavorito(p.id);
-                const ahoraFav = nuevosFavs.includes(p.id);
-                favBtn.textContent = ahoraFav ? "♥" : "♡";
-                favBtn.classList.toggle("text-red-500", ahoraFav);
-                favBtn.classList.toggle("text-gray-400", !ahoraFav);
-                favBtn.title = ahoraFav
-                    ? "Quitar de favoritos"
-                    : "Agregar a favoritos";
-            });
-        }
-
-        // evento botón "Agregar" (carrito) 👇👇
-        const addCartBtn = card.querySelector("[data-add-cart]");
-        if (addCartBtn) {
-            addCartBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                agregarAlCarrito(p.id);
-            });
-        }
-
-        grid.appendChild(card);
+  // evento corazoncito (favoritos)
+  const favBtn = card.querySelector("[data-fav]");
+  if (favBtn) {
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const nuevosFavs = toggleFavorito(p.id);
+      const ahoraFav = nuevosFavs.includes(p.id);
+      favBtn.textContent = ahoraFav ? "♥" : "♡";
+      favBtn.classList.toggle("text-red-500", ahoraFav);
+      favBtn.classList.toggle("text-gray-400", !ahoraFav);
+      favBtn.title = ahoraFav
+        ? "Quitar de favoritos"
+        : "Agregar a favoritos";
     });
+  }
+
+  // evento botón "Agregar" (carrito) 👇👇
+  const addCartBtn = card.querySelector("[data-add-cart]");
+  if (addCartBtn) {
+    addCartBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      agregarAlCarrito(p.id);
+    });
+  }
+
+  grid.appendChild(card);
+});
 
 }
 

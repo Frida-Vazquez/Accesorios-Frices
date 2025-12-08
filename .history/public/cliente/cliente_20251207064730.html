@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Accesorios Frices</title>
+    <title>Accesorios Frices - Cliente</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Tailwind -->
@@ -61,24 +61,27 @@
                     <span id="userGreeting" class="text-xs md:text-sm"></span>
                 </button>
                 <!-- FAVORITOS -->
-                <a href="/static/cliente/favoritos.html"
-                    class="hidden sm:inline-flex relative hover:text-[#8a555b] transition" title="Favoritos">
-                    💜
-                    <span id="favCount"
-                        class="absolute -top-2 -right-3 bg-purple-600 text-white text-[10px] px-2 py-[1px] rounded-full hidden">
-                        0
-                    </span>
+                <a
+                  href="/static/cliente/favoritos.html"
+                  class="hidden sm:inline-flex relative hover:text-[#8a555b] transition"
+                  title="Favoritos"
+                >
+                  💜
+                  <span
+                    id="favCount"
+                    class="absolute -top-2 -right-3 bg-purple-600 text-white text-[10px] px-2 py-[1px] rounded-full hidden"
+                  >
+                    0
+                  </span>
                 </a>
                 <!-- CARRITO -->
-                <a href="/static/cliente/carrito.html" class="hover:text-[#8a555b] relative transition" title="Carrito">
+                <button class="hover:text-[#8a555b] relative transition" title="Carrito">
                     🛒
                     <span
-                        class="absolute -top-2 -right-3 bg-orange-600 text-white text-[10px] px-2 py-[1px] rounded-full"
-                        id="cartCounter">
+                        class="absolute -top-2 -right-3 bg-orange-600 text-white text-[10px] px-2 py-[1px] rounded-full">
                         0
                     </span>
-                </a>
-
+                </button>
 
                 <!-- MENÚ DESPLEGABLE USUARIO -->
                 <div id="userMenu"

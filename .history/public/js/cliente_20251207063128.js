@@ -23,6 +23,11 @@ function clearClienteSession() {
   localStorage.removeItem("cliente_token"); // por si acaso
 }
 
+function authHeader() {
+  const token = getClienteToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 
 // ================== HELPER RESPUESTAS ==================
 function parseData(resp) {
@@ -286,6 +291,7 @@ function initUserMenu() {
     window.location.href = "/static/cliente/cliente.html";
   });
 }
+
 // ================== FAVORITOS - CONTADOR NAVBAR ==================
 function getFavoritosLS() {
   try {

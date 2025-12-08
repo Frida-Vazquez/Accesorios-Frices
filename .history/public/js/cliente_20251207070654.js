@@ -23,6 +23,11 @@ function clearClienteSession() {
   localStorage.removeItem("cliente_token"); // por si acaso
 }
 
+function authHeader() {
+  const token = getClienteToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 
 // ================== HELPER RESPUESTAS ==================
 function parseData(resp) {
@@ -225,11 +230,12 @@ async function loadProductosSlider() {
     }
 
     if (agregarBtn) {
-      agregarBtn.addEventListener("click", () => {
-        const prod = productosSlider[prodIndex];
-        alert("Aquí agregarías al carrito el producto ID " + prod.id);
-      });
-    }
+  agregarBtn.addEventListener("click", () => {
+    const prod = productosSlider[prodIndex];
+    agregarAlCarrito(prod.id); // 👈 ahora sí lo manda al carrito
+  });
+}
+
   } catch (err) {
     console.error("Error cargando productos slider:", err);
   }
@@ -286,6 +292,34 @@ function initUserMenu() {
     window.location.href = "/static/cliente/cliente.html";
   });
 }
+
+// ========== CARRITO: AGREGAR PRODUCTO ==========
+async function agregarAlCarrito(productoId) {
+  if (!getClienteToken()) {
+    alert("Debes iniciar sesión para agregar productos al carrito.");
+    return;
+  }
+
+  try {
+    const resp = await fetch(`${API_URL}/carrito/agregar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+      body: JSON.stringify({ productoId, cantidad: 1 }),
+    });
+
+    if (!resp.ok) throw new Error("No se pudo agregar al carrito");
+
+    await resp.json(); // por si luego quieres usar la respuesta
+    alert("Producto agregado al carrito ✨");
+  } catch (e) {
+    console.error(e);
+    alert("Ocurrió un error al agregar al carrito.");
+  }
+}
+
 // ================== FAVORITOS - CONTADOR NAVBAR ==================
 function getFavoritosLS() {
   try {

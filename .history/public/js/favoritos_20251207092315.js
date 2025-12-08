@@ -99,6 +99,7 @@ function renderFavoritos(lista) {
             $${precioNum.toFixed(2)} MXN
           </span>
           <button
+          data-add-cart
             class="text-xs px-3 py-1 rounded-full border border-[#8a555b] text-[#8a555b] hover:bg-[#8a555b] hover:text-white transition"
           >
             Agregar

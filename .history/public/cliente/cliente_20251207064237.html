@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Accesorios Frices - Cliente</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- ============================ BARRA SUPERIOR ============================= -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto py-2 px-4 text-center">
+      ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+    </div>
+  </div>
+
+  <!-- ============================ NAVBAR ============================= -->
+  <header class="bg-white/90 backdrop-blur shadow-sm sticky top-0 z-30">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3 relative">
+
+      <!-- IZQUIERDA -->
+      <div class="flex items-center gap-4 text-xs md:text-sm">
+        <a href="/static/cliente/cliente.html" class="hover:text-[#8a555b] transition-colors">Inicio</a>
+        <a href="#categorias" class="hover:text-[#8a555b] transition-colors">Categorías</a>
+        <a href="#destacados" class="hover:text-[#8a555b] transition-colors">Recomendados</a>
+      </div>
+
+      <!-- CENTRO: LOGO / TÍTULO -->
+      <div class="absolute left-1/2 -translate-x-1/2">
+        <span class="text-lg md:text-xl font-semibold tracking-wide text-[#8a555b]">
+          Accesorios <span class="text-orange-600">Frices</span>
+        </span>
+      </div>
+
+      <!-- DERECHA -->
+      <div class="flex items-center gap-4 md:gap-5 text-lg relative">
+
+        <!-- BUSCADOR (placeholder) -->
+        <button
+          class="hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#f3e2dd] transition"
+          title="Buscar">
+          🔍
+        </button>
+
+        <!-- PERFIL + HOLA NOMBRE -->
+        <button id="userMenuBtn"
+          class="flex items-center gap-1 text-sm md:text-base hover:text-[#8a555b] transition" title="Mi cuenta">
+          <span>👤</span>
+          <span id="userGreeting" class="text-xs md:text-sm"></span>
+        </button>
+
+        <!-- FAVORITOS -->
+        <a href="/static/cliente/favoritos.html"
+          class="hidden sm:inline-flex relative hover:text-[#8a555b] transition" title="Favoritos">
+          💜
+          <span id="favCount"
+            class="absolute -top-2 -right-3 bg-purple-600 text-white text-[10px] px-2 py-[1px] rounded-full hidden">
+            0
+          </span>
+        </a>
+
+        <!-- CARRITO -->
+        <button id="btnOpenCart" class="relative hover:text-[#8a555b] transition" title="Carrito">
+          🛒
+          <span id="cartCount"
+            class="absolute -top-2 -right-2 bg-[#8a555b] text-white text-xs rounded-full px-1">
+            0
+          </span>
+        </button>
+
+        <!-- MENÚ DESPLEGABLE USUARIO -->
+        <div id="userMenu"
+          class="hidden absolute right-0 top-10 w-52 bg-white shadow-xl rounded-2xl border border-gray-100 text-sm z-40">
+
+          <div class="px-4 py-3 border-b">
+            <p class="text-[11px] text-gray-500">Sesión iniciada como</p>
+            <p id="userName" class="font-semibold text-gray-800 truncate text-xs md:text-sm"></p>
+          </div>
+
+          <button id="logoutClienteBtn"
+            class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 text-xs">
+            Cerrar sesión
+          </button>
+        </div>
+
+      </div>
+    </nav>
+  </header>
+
+  <!-- ============================ HERO ============================= -->
+  <section class="w-full text-white bg-cover bg-center"
+    style="background-image: url('https://images.pexels.com/photos/19272523/pexels-photo-19272523.jpeg?auto=compress');">
+    <div class="w-full h-full bg-black/40">
+      <div
+        class="max-w-6xl mx-auto px-4 py-16 md:py-20 flex flex-col items-center md:items-start text-center md:text-left">
+
+        <p class="text-xs md:text-sm mb-2 tracking-wide uppercase">
+          Joyería de acero inoxidable · Oro laminado
+        </p>
+
+        <h1 class="text-3xl md:5xl font-bold mb-4 leading-tight">
+          Brilla todos los días<br class="hidden md:block">
+          con accesorios que duran ✨
+        </h1>
+
+        <p class="text-sm md:text-base mb-6 opacity-90 max-w-xl">
+          Piezas pensadas para tu día a día: resistentes al agua, hipoalergénicas
+          y con un brillo que se mantiene.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
+          <a href="#categorias"
+            class="inline-block px-7 py-3 bg-white text-[#8a555b] rounded-full text-xs md:text-sm font-semibold shadow hover:bg-[#f2eaea] transition">
+            Ver categorías
+          </a>
+          <a href="#destacados"
+            class="inline-block px-7 py-3 border border-white/70 text-white rounded-full text-xs md:text-sm font-medium hover:bg-white/10 transition">
+            Ver recomendaciones
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ CONTENIDO PRINCIPAL ============================= -->
+  <main class="max-w-6xl mx-auto px-4 py-10 md:py-12 space-y-14">
+
+    <!-- ============================ CATEGORÍAS ============================= -->
+    <section id="categorias" class="space-y-4">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl md:text-2xl font-semibold">Explora por categoría</h2>
+          <p class="text-xs md:text-sm text-gray-600">
+            Encuentra aretes, cadenas, pulseras y sets pensados para combinar entre sí.
+          </p>
+        </div>
+      </div>
+
+      <!-- GRID DINÁMICA (la rellena loadCategorias) -->
+      <div id="categoriasGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mt-4">
+        <!-- Tus 4 categorías de ejemplo (puedes quitarlas si ya usas solo las de la BD) -->
+        <article
+          class="bg-white rounded-3xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition"
+          onclick="window.location.href='/collections/aretes'">
+          <div class="w-full aspect-[4/5] overflow-hidden">
+            <img src="https://tus-imagenes.com/aretes.jpg" alt="Aretes" class="w-full h-full object-cover">
+          </div>
+          <div class="bg-white text-center py-3 text-xs md:text-sm font-semibold tracking-wide text-gray-800">
+            ARETES
+          </div>
+        </article>
+
+        <article
+          class="bg-white rounded-3xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition"
+          onclick="window.location.href='/collections/cadenas'">
+          <div class="w-full aspect-[4/5] overflow-hidden">
+            <img src="https://tus-imagenes.com/cadenas.jpg" alt="Cadenas" class="w-full h-full object-cover">
+          </div>
+          <div class="bg-white text-center py-3 text-xs md:text-sm font-semibold tracking-wide text-gray-800">
+            CADENAS
+          </div>
+        </article>
+
+        <article
+          class="bg-white rounded-3xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition"
+          onclick="window.location.href='/collections/anillos'">
+          <div class="w-full aspect-[4/5] overflow-hidden">
+            <img src="https://tus-imagenes.com/anillos.jpg" alt="Anillos" class="w-full h-full object-cover">
+          </div>
+          <div class="bg-white text-center py-3 text-xs md:text-sm font-semibold tracking-wide text-gray-800">
+            ANILLOS
+          </div>
+        </article>
+
+        <article
+          class="bg-white rounded-3xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition"
+          onclick="window.location.href='/collections/pulseras'">
+          <div class="w-full aspect-[4/5] overflow-hidden">
+            <img src="https://tus-imagenes.com/pulseras.jpg" alt="Pulseras" class="w-full h-full object-cover">
+          </div>
+          <div class="bg-white text-center py-3 text-xs md:text-sm font-semibold tracking-wide text-gray-800">
+            PULSERAS
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============================ PRODUCTO DESTACADO (SLIDER) ============================= -->
+    <section id="destacados" class="bg-white rounded-3xl shadow-sm p-5 md:p-7">
+      <div class="flex flex-col md:flex-row gap-6 md:gap-10 items-center">
+
+        <!-- IMAGEN DEL SLIDE -->
+        <div class="w-full md:w-1/2">
+          <div class="aspect-[4/5] bg-gray-100 rounded-2xl overflow-hidden">
+            <img id="prodImagen" src="https://via.placeholder.com/800x800?text=Producto"
+              alt="Producto destacado" class="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        <!-- INFO DEL SLIDE -->
+        <div class="w-full md:w-1/2 flex flex-col h-full">
+          <p id="prodCategoria" class="text-[11px] uppercase tracking-[0.16em] text-[#8a555b] mb-2">
+            Selección Frices
+          </p>
+
+          <h2 id="prodNombre" class="text-xl md:text-2xl font-semibold mb-2">
+            Producto destacado
+          </h2>
+
+          <p id="prodDescripcion" class="text-sm md:text-base text-gray-600 mb-4">
+            Descubre esta pieza seleccionada especialmente para ti. Ideal para uso diario, resistente al
+            agua y con un brillo increíble.
+          </p>
+
+          <p id="prodPrecio" class="text-lg font-bold text-[#8a555b] mb-4">
+            <!-- lo llena JS -->
+          </p>
+
+          <!-- BOTONES -->
+          <div class="flex flex-wrap gap-3 mb-5">
+            <button id="prodVerBtn"
+              class="px-5 py-2.5 rounded-full text-xs md:text-sm font-medium bg-[#8a555b] text-white hover:bg-[#73444a] transition">
+              Ver detalle
+            </button>
+            <button id="prodAgregarBtn"
+              class="px-5 py-2.5 rounded-full text-xs md:text-sm font-medium border border-[#8a555b] text-[#8a555b] hover:bg-[#f8e7e5] transition">
+              Agregar al carrito
+            </button>
+          </div>
+
+          <!-- CONTROLES SLIDER -->
+          <div class="mt-auto flex items-center justify-between pt-3 border-t border-gray-100">
+            <div class="flex items-center gap-2">
+              <button id="prodPrev"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 text-xs">
+                ‹
+              </button>
+              <button id="prodNext"
+                class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 text-xs">
+                ›
+              </button>
+            </div>
+
+            <div id="prodDots" class="flex items-center gap-2">
+              <!-- los puntitos los genera JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ PANEL CARRITO ============================= -->
+
+  <!-- FONDO OSCURO -->
+  <div id="cartOverlay" class="fixed inset-0 bg-black/40 z-40 hidden"></div>
+
+  <!-- PANEL LATERAL -->
+  <div id="cartPanel"
+    class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-xl z-50 flex flex-col hidden">
+
+    <!-- HEADER -->
+    <div class="flex items-center justify-between px-4 py-3 border-b">
+      <h2 class="text-lg font-semibold">Carrito</h2>
+      <button id="btnCloseCart" class="text-gray-500 text-2xl leading-none">&times;</button>
+    </div>
+
+    <!-- ITEMS -->
+    <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-4">
+      <!-- Se llena con JS -->
+    </div>
+
+    <!-- FOOTER -->
+    <div class="border-t px-4 py-3 space-y-2">
+      <div class="flex justify-between items-center">
+        <span class="font-medium">Total:</span>
+        <span id="cartTotal" class="text-lg font-bold">$0.00</span>
+      </div>
+      <button id="btnCheckoutCart"
+        class="w-full bg-[#8a555b] text-white py-2 rounded-md text-sm font-medium">
+        Pagar pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================ FOOTER SIMPLE ============================= -->
+  <footer class="border-t border-gray-200 mt-10">
+    <div
+      class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] md:text-xs text-gray-500">
+      <p>© 2025 Accesorios Frices. Todos los derechos reservados.</p>
+      <p>Hecho con ✨ y mucho brillo.</p>
+    </div>
+  </footer>
+
+  <!-- ============================ SCRIPT ============================= -->
+  <script src="/static/js/cliente.js"></script>
+</body>
+
+</html>

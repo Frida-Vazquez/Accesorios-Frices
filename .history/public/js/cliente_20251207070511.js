@@ -23,6 +23,11 @@ function clearClienteSession() {
   localStorage.removeItem("cliente_token"); // por si acaso
 }
 
+function authHeader() {
+  const token = getClienteToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 
 // ================== HELPER RESPUESTAS ==================
 function parseData(resp) {

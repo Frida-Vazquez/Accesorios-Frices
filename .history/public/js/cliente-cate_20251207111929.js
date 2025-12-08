@@ -33,20 +33,14 @@ async function agregarAlCarrito(productoId) {
             body: JSON.stringify({ productoId, cantidad: 1 }),
         });
 
-        const data = await resp.json();
-
-        if (!resp.ok) {
-            // si viene mensaje claro desde el backend, lo mostramos
-            throw new Error(data?.message || "No se pudo agregar al carrito.");
-        }
+        if (!resp.ok) throw new Error("No se pudo agregar al carrito");
 
         alert("Producto agregado al carrito 🛒");
     } catch (err) {
         console.error("Error agregando al carrito:", err);
-        alert(err.message || "Ocurrió un error al agregar al carrito.");
+        alert("Ocurrió un error al agregar al carrito.");
     }
 }
-
 
 // /collections/aretes -> "aretes"
 const slugUrl = window.location.pathname.split("/").pop();

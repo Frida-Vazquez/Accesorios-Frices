@@ -1,52 +1,7 @@
 // public/js/cliente-cate.js
+
 const API_URL = "/api";
-const CLIENTE_TOKEN_KEY = "frices_token";
-const FAVORITOS_KEY = "frices_favoritos"; // 👈 AGREGA ESTO
-
-function getClienteToken() {
-    return localStorage.getItem(CLIENTE_TOKEN_KEY);
-}
-
-function authHeader() {
-    const token = getClienteToken();
-    return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
-async function agregarAlCarrito(productoId) {
-    if (!getClienteToken()) {
-        const ir = confirm(
-            "Debes iniciar sesión para agregar productos al carrito.\n¿Quieres ir a la página de inicio de sesión?"
-        );
-        if (ir) {
-            window.location.href = "/static/auth/login.html";
-        }
-        return;
-    }
-
-    try {
-        const resp = await fetch(`${API_URL}/carrito/agregar`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                ...authHeader(),
-            },
-            body: JSON.stringify({ productoId, cantidad: 1 }),
-        });
-
-        const data = await resp.json();
-
-        if (!resp.ok) {
-            // si viene mensaje claro desde el backend, lo mostramos
-            throw new Error(data?.message || "No se pudo agregar al carrito.");
-        }
-
-        alert("Producto agregado al carrito 🛒");
-    } catch (err) {
-        console.error("Error agregando al carrito:", err);
-        alert(err.message || "Ocurrió un error al agregar al carrito.");
-    }
-}
-
+const FAVORITOS_KEY = "frices_favoritos";
 
 // /collections/aretes -> "aretes"
 const slugUrl = window.location.pathname.split("/").pop();
@@ -135,46 +90,58 @@ function renderProductos(lista) {
         const esFav = favs.includes(p.id);
 
         card.innerHTML = `
-    <!-- BOTÓN FAVORITO -->
-    <button
-      type="button"
-      data-fav
-      class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-sm ${esFav ? "text-red-500" : "text-gray-400"}"
-      title="${esFav ? "Quitar de favoritos" : "Agregar a favoritos"}"
-    >
-      ${esFav ? "♥" : "♡"}
-    </button>
+      <!-- BOTÓN FAVORITO -->
+      <button
+        type="button"
+        data-fav
+        class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-sm ${esFav ? "text-red-500" : "text-gray-400"
+            }"
+        title="${esFav ? "Quitar de favoritos" : "Agregar a favoritos"}"
+      >
+        ${esFav ? "♥" : "♡"}
+      </button>
 
-    <div class="h-52 overflow-hidden">
-      <img
-        src="${imgSrc}"
-        alt="${p.nombre}"
-        class="w-full h-full object-cover"
-      />
-    </div>
-    <div class="p-4 flex-1 flex flex-col">
-      <h3 class="text-sm font-semibold mb-1 line-clamp-2">
-        ${p.nombre}
-      </h3>
-      <p class="text-xs text-gray-500 mb-2 line-clamp-2">
-        ${p.descripcion || ""}
-      </p>
-      <div class="mt-auto flex items-center justify-between">
-        <span class="font-bold text-sm">
-          $${precioNum.toFixed(2)} MXN
-        </span>
-        <button
-          type="button"
-          data-add-cart
-          class="text-xs px-3 py-1 rounded-full border border-[#8a555b] text-[#8a555b] hover:bg-[#8a555b] hover:text-white transition"
-        >
-          Agregar
-        </button>
+      <div class="h-52 overflow-hidden">
+        <img
+          src="${imgSrc}"
+          alt="${p.nombre}"
+          class="w-full h-full object-cover"
+        />
       </div>
-    </div>
-  `;
+      <div class="p-4 flex-1 flex flex-col">
+        <h3 class="text-sm font-semibold mb-1 line-clamp-2">
+          ${p.nombre}
+        </h3>
+        <p class="text-xs text-gray-500 mb-2 line-clamp-2">
+          ${p.descripcion || ""}
+        </p>
+        <div class="mt-auto flex items-center justify-between">
+          <span class="font-bold text-sm">
+            $${precioNum.toFixed(2)} MXN
+          </span>
+          <button
+  class="btn-agregar text-xs px-3 py-1 rounded-full border border-[#8a555b] text-[#8a555b] hover:bg-[#8a555b] hover:text-white transition"
+>
+  Agregar
+</button>
 
-        // evento corazoncito (favoritos)
+        </div>
+      </div>
+    `;
+
+        // BOTÓN AGREGAR AL CARRITO
+        const btnAgregar = card.querySelector(".btn-agregar");
+
+        if (btnAgregar) {
+            btnAgregar.addEventListener("click", (e) => {
+                e.stopPropagation(); // evita que abra la vista detalle
+
+                agregarAlCarrito(p.id); // 👈 AGREGA EL PRODUCTO AL CARRITO REAL
+            });
+        }
+
+
+        // evento corazoncito
         const favBtn = card.querySelector("[data-fav]");
         if (favBtn) {
             favBtn.addEventListener("click", (e) => {
@@ -190,18 +157,8 @@ function renderProductos(lista) {
             });
         }
 
-        // evento botón "Agregar" (carrito) 👇👇
-        const addCartBtn = card.querySelector("[data-add-cart]");
-        if (addCartBtn) {
-            addCartBtn.addEventListener("click", (e) => {
-                e.stopPropagation();
-                agregarAlCarrito(p.id);
-            });
-        }
-
         grid.appendChild(card);
     });
-
 }
 
 // ========== CARGA INICIAL (categoría + productos) ==========

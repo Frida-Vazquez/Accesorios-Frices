@@ -13,38 +13,38 @@ function authHeader() {
 }
 
 async function agregarAlCarrito(productoId) {
-    if (!getClienteToken()) {
-        const ir = confirm(
-            "Debes iniciar sesión para agregar productos al carrito.\n¿Quieres ir a la página de inicio de sesión?"
-        );
-        if (ir) {
-            window.location.href = "/static/auth/login.html";
-        }
-        return;
+  if (!getClienteToken()) {
+    const ir = confirm(
+      "Debes iniciar sesión para agregar productos al carrito.\n¿Quieres ir a la página de inicio de sesión?"
+    );
+    if (ir) {
+      window.location.href = "/static/auth/login.html";
+    }
+    return;
+  }
+
+  try {
+    const resp = await fetch(`${API_URL}/carrito/agregar`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...authHeader(),
+      },
+      body: JSON.stringify({ productoId, cantidad: 1 }),
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      // si viene mensaje claro desde el backend, lo mostramos
+      throw new Error(data?.message || "No se pudo agregar al carrito.");
     }
 
-    try {
-        const resp = await fetch(`${API_URL}/carrito/agregar`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                ...authHeader(),
-            },
-            body: JSON.stringify({ productoId, cantidad: 1 }),
-        });
-
-        const data = await resp.json();
-
-        if (!resp.ok) {
-            // si viene mensaje claro desde el backend, lo mostramos
-            throw new Error(data?.message || "No se pudo agregar al carrito.");
-        }
-
-        alert("Producto agregado al carrito 🛒");
-    } catch (err) {
-        console.error("Error agregando al carrito:", err);
-        alert(err.message || "Ocurrió un error al agregar al carrito.");
-    }
+    alert("Producto agregado al carrito 🛒");
+  } catch (err) {
+    console.error("Error agregando al carrito:", err);
+    alert(err.message || "Ocurrió un error al agregar al carrito.");
+  }
 }
 
 

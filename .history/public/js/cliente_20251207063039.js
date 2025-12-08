@@ -24,6 +24,8 @@ function clearClienteSession() {
 }
 
 
+
+
 // ================== HELPER RESPUESTAS ==================
 function parseData(resp) {
   if (Array.isArray(resp)) return resp;

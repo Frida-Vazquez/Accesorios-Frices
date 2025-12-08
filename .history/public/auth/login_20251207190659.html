@@ -100,102 +100,102 @@
 
     <!-- LÓGICA LOGIN -->
     <script>
-        const API_URL = "/api";
-        const $ = (id) => document.getElementById(id);
+  const API_URL = "/api";
+  const $ = (id) => document.getElementById(id);
 
-        function clearMessages() {
-            const m1 = $("message");
-            const m2 = $("msg-login");
-            if (m1) m1.innerText = "";
-            if (m2) m2.innerText = "";
+  function clearMessages() {
+    const m1 = $("message");
+    const m2 = $("msg-login");
+    if (m1) m1.innerText = "";
+    if (m2) m2.innerText = "";
+  }
+
+  function validarEmail(correo) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+  }
+
+  async function login() {
+    clearMessages();
+
+    const email = $("log-email").value.trim();
+    const pass = $("log-pass").value.trim();
+
+    if (!email || !pass) {
+      $("msg-login").innerText = "⚠️ Ingresa correo y contraseña.";
+      return;
+    }
+
+    if (!validarEmail(email)) {
+      $("msg-login").innerText = "⚠️ El correo no es válido.";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: pass }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (data.message?.includes("Credenciales")) {
+          $("msg-login").innerText = "❌ Correo o contraseña incorrectos.";
+        } else {
+          $("msg-login").innerText = data.message || "❌ Error al iniciar sesión.";
         }
+        return;
+      }
 
-        function validarEmail(correo) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo);
+      // =========================
+      // GUARDAR TOKEN Y NOMBRE
+      // =========================
+      if (data.token) {
+        localStorage.setItem("frices_token", data.token);
+        localStorage.setItem("cliente_token", data.token);
+        localStorage.setItem(
+          "cliente_nombre",
+          data.user?.nombre || data.user?.email || email
+        );
+      }
+
+      const roles = Array.isArray(data.user?.roles) ? data.user.roles : [];
+
+      // =========================
+      // SI ES ADMIN → IR A ADMIN
+      // =========================
+      if (roles.includes("ADMIN")) {
+        window.location.href = "/static/admin/admin.html";
+        return;
+      }
+
+      // =========================
+      // SI ES CLIENTE → VACIAR CARRITO EN BD
+      // =========================
+      if (data.token) {
+        try {
+          await fetch(`${API_URL}/carrito/vaciar`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${data.token}`,
+            },
+          });
+        } catch (e) {
+          console.warn("No se pudo vaciar carrito al login (no es grave):", e);
         }
+      }
 
-        async function login() {
-            clearMessages();
+      // Redirigir al área de cliente
+      window.location.href = "/static/cliente/cliente.html";
 
-            const email = $("log-email").value.trim();
-            const pass = $("log-pass").value.trim();
-
-            if (!email || !pass) {
-                $("msg-login").innerText = "⚠️ Ingresa correo y contraseña.";
-                return;
-            }
-
-            if (!validarEmail(email)) {
-                $("msg-login").innerText = "⚠️ El correo no es válido.";
-                return;
-            }
-
-            try {
-                const res = await fetch(`${API_URL}/auth/login`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email, password: pass }),
-                });
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    if (data.message?.includes("Credenciales")) {
-                        $("msg-login").innerText = "❌ Correo o contraseña incorrectos.";
-                    } else {
-                        $("msg-login").innerText = data.message || "❌ Error al iniciar sesión.";
-                    }
-                    return;
-                }
-
-                // =========================
-                // GUARDAR TOKEN Y NOMBRE
-                // =========================
-                if (data.token) {
-                    localStorage.setItem("frices_token", data.token);
-                    localStorage.setItem("cliente_token", data.token);
-                    localStorage.setItem(
-                        "cliente_nombre",
-                        data.user?.nombre || data.user?.email || email
-                    );
-                }
-
-                const roles = Array.isArray(data.user?.roles) ? data.user.roles : [];
-
-                // =========================
-                // SI ES ADMIN → IR A ADMIN
-                // =========================
-                if (roles.includes("ADMIN")) {
-                    window.location.href = "/static/admin/admin.html";
-                    return;
-                }
-
-                // =========================
-                // SI ES CLIENTE → VACIAR CARRITO EN BD
-                // =========================
-                if (data.token) {
-                    try {
-                        await fetch(`${API_URL}/carrito/vaciar`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: `Bearer ${data.token}`,
-                            },
-                        });
-                    } catch (e) {
-                        console.warn("No se pudo vaciar carrito al login (no es grave):", e);
-                    }
-                }
-
-                // Redirigir al área de cliente
-                window.location.href = "/static/cliente/cliente.html";
-
-            } catch (err) {
-                console.error(err);
-                $("message").innerText = "❌ Error de red al iniciar sesión.";
-            }
-        }
-    </script>
+    } catch (err) {
+      console.error(err);
+      $("message").innerText = "❌ Error de red al iniciar sesión.";
+    }
+  }
+</script>
 
 
 </body>

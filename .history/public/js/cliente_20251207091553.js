@@ -227,9 +227,14 @@ async function loadProductosSlider() {
     if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
-        alert("Aquí agregarías al carrito el producto ID " + prod.id);
+        if (typeof agregarAlCarrito === "function") {
+          agregarAlCarrito(prod.id, 1);
+        } else {
+          alert("La función de carrito no está disponible.");
+        }
       });
     }
+
   } catch (err) {
     console.error("Error cargando productos slider:", err);
   }

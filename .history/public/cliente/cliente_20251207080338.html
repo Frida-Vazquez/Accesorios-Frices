@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Accesorios Frices</title>
+    <title>Accesorios Frices - Cliente</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Tailwind -->
@@ -70,14 +70,85 @@
                     </span>
                 </a>
                 <!-- CARRITO -->
-                <a href="/static/cliente/carrito.html" class="hover:text-[#8a555b] relative transition" title="Carrito">
-                    🛒
-                    <span
-                        class="absolute -top-2 -right-3 bg-orange-600 text-white text-[10px] px-2 py-[1px] rounded-full"
-                        id="cartCounter">
-                        0
-                    </span>
-                </a>
+                <!-- CARRITO -->
+                <!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi carrito - Accesorios Frices</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900">
+
+  <!-- BARRA SUPERIOR -->
+  <div class="w-full bg-[#8a555b] text-white text-sm">
+    <div class="max-w-6xl mx-auto py-2 px-4 text-center">
+      ✨ Temporada de brillo con ACCESORIOS FRICES – Envío gratis desde $1,200 MXN ✨
+    </div>
+  </div>
+
+  <!-- NAVBAR SIMPLE -->
+  <header class="bg-white/90 backdrop-blur shadow-sm">
+    <nav class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <a href="/static/cliente/cliente.html" class="text-xs md:text-sm hover:text-[#8a555b]">
+        ← Seguir comprando
+      </a>
+
+      <h1 class="text-base md:text-lg font-semibold">Mi carrito</h1>
+
+      <span class="text-xs md:text-sm text-transparent">placeholder</span>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 md:py-10">
+
+    <!-- LISTA DE PRODUCTOS -->
+    <section class="space-y-6">
+      <div id="carritoContainer" class="space-y-4">
+        <!-- Aquí se renderizan los productos con JS -->
+      </div>
+
+      <!-- TOTAL Y BOTÓN -->
+      <div
+        class="mt-4 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-gray-200 pt-4">
+        <div class="text-base md:text-lg font-semibold">
+          Total:
+          <span id="carritoTotal" class="ml-2">$0.00</span>
+        </div>
+
+        <button id="btnCheckout"
+          class="px-6 py-2.5 rounded-full bg-[#8a555b] text-white text-sm md:text-base font-medium hover:bg-[#73444a] transition">
+          Finalizar compra
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-200 mt-10">
+    <div
+      class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] md:text-xs text-gray-500">
+      <p>© 2025 Accesorios Frices. Todos los derechos reservados.</p>
+      <p>Hecho con ✨ y mucho brillo.</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/carrito.js"></script>
+</body>
+
+</html>
+
 
 
                 <!-- MENÚ DESPLEGABLE USUARIO -->

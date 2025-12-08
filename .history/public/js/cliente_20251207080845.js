@@ -32,8 +32,7 @@ function parseData(resp) {
 }
 
 
-// ================== CARGAR CATEGORÍAS ==================
-// Función para generar un slug a partir del nombre
+// ================== CARGAR CATEGORÍAS (NO LA USAMOS AHORITA) ==================
 function slugify(nombre) {
   return nombre
     .toLowerCase()
@@ -43,7 +42,8 @@ function slugify(nombre) {
     .replace(/[^a-z0-9\-]/g, "");    // quita caracteres raros
 }
 
-// ================== CARGAR CATEGORÍAS ==================
+// Esta función ya no se llama desde el init para que NO borre tus 4 tarjetas
+// estáticas del HTML. La dejamos aquí por si luego quieres usarla.
 async function loadCategorias() {
   const grid = document.getElementById("categoriasGrid");
   if (!grid) return;
@@ -68,12 +68,13 @@ async function loadCategorias() {
       article.innerHTML = `
         <div class="w-full aspect-[4/5] overflow-hidden">
           <img
-            src="${cat.url_imagen ||
-        cat.imagen_url ||
-        cat.imagen ||
-        cat.foto ||
-        "https://via.placeholder.com/600x800?text=Categoria"
-        }"
+            src="${
+              cat.url_imagen ||
+              cat.imagen_url ||
+              cat.imagen ||
+              cat.foto ||
+              "https://via.placeholder.com/600x800?text=Categoria"
+            }"
             alt="${cat.nombre}"
             class="w-full h-full object-cover"
           />
@@ -95,12 +96,6 @@ async function loadCategorias() {
 }
 
 
-// ================== INICIO ==================
-window.addEventListener("DOMContentLoaded", () => {
-  // aquí ya haces lo que tenías (saludo, user, etc.)
-  loadCategorias(); // 👈 asegúrate de llamarla
-});
-
 // ========== SLIDER DE PRODUCTOS DESDE LA BD ==========
 let productosSlider = [];
 let prodIndex = 0;
@@ -120,9 +115,15 @@ function renderProductoSlide() {
   const prod = productosSlider[prodIndex];
 
   const nombre = prod.nombre || "Producto destacado";
-  const desc = prod.descripcion || "Descubre esta pieza seleccionada especialmente para ti.";
+  const desc =
+    prod.descripcion ||
+    "Descubre esta pieza seleccionada especialmente para ti.";
   const imagen =
-    prod.imagen_url || prod.imagen || prod.foto || "https://via.placeholder.com/800x800?text=Producto";
+    prod.imagen_url ||
+    prod.url_imagen ||
+    prod.imagen ||
+    prod.foto ||
+    "https://via.placeholder.com/800x800?text=Producto";
 
   const precio =
     prod.precio != null ? `$${Number(prod.precio).toFixed(2)} MXN` : "";
@@ -168,7 +169,6 @@ function renderProductoSlide() {
 
 function resetProdInterval() {
   if (prodInterval) clearInterval(prodInterval);
-
   if (!productosSlider.length) return;
 
   prodInterval = setInterval(() => {
@@ -227,7 +227,9 @@ async function loadProductosSlider() {
     if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
-        alert("Aquí agregarías al carrito el producto ID " + prod.id);
+        alert("Aquí podrías agregar al carrito el producto ID " + prod.id);
+        // Si quieres que el slider también use el carrito de localStorage,
+        // luego podemos reutilizar la misma lógica de cliente-cate.js.
       });
     }
   } catch (err) {
@@ -286,6 +288,7 @@ function initUserMenu() {
     window.location.href = "/static/cliente/cliente.html";
   });
 }
+
 // ================== FAVORITOS - CONTADOR NAVBAR ==================
 function getFavoritosLS() {
   try {
@@ -324,7 +327,8 @@ window.addEventListener("storage", (e) => {
 
 // ========== INIT AL CARGAR ==========
 document.addEventListener("DOMContentLoaded", () => {
-  loadCategorias();
+  // NO llamamos loadCategorias() para que NO borre tus 4 tarjetas estáticas
+  // loadCategorias();
   loadProductosSlider();
   initUserMenu();
   updateFavCountBadge();

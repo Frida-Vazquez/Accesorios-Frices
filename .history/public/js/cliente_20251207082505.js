@@ -1,12 +1,10 @@
 // public/js/cliente.js
-// public/cliente/cliente.js
 
 const API_URL = "/api";
 
 // Usamos el mismo token que el login/admin:
 const CLIENTE_TOKEN_KEY = "frices_token";
 const CLIENTE_NOMBRE_KEY = "cliente_nombre";
-
 
 // ================== SESIÓN CLIENTE ==================
 function getClienteToken() {
@@ -23,7 +21,6 @@ function clearClienteSession() {
   localStorage.removeItem("cliente_token"); // por si acaso
 }
 
-
 // ================== HELPER RESPUESTAS ==================
 function parseData(resp) {
   if (Array.isArray(resp)) return resp;
@@ -31,75 +28,15 @@ function parseData(resp) {
   return [];
 }
 
-
-// ================== CARGAR CATEGORÍAS ==================
-// Función para generar un slug a partir del nombre
+// (NO vamos a usar loadCategorias para NO borrar tus tarjetas estáticas)
 function slugify(nombre) {
   return nombre
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // quita acentos
-    .replace(/\s+/g, "-")            // espacios -> guiones
-    .replace(/[^a-z0-9\-]/g, "");    // quita caracteres raros
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
 }
-
-// ================== CARGAR CATEGORÍAS ==================
-async function loadCategorias() {
-  const grid = document.getElementById("categoriasGrid");
-  if (!grid) return;
-
-  try {
-    const resp = await fetch(`${API_URL}/categorias`);
-    const data = await resp.json();
-
-    grid.innerHTML = "";
-
-    data.forEach((cat) => {
-      const slug = cat.slug || slugify(cat.nombre);
-
-      const article = document.createElement("article");
-      article.className =
-        "bg-white rounded-3xl shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition";
-
-      article.addEventListener("click", () => {
-        window.location.href = `/collections/${slug}`;
-      });
-
-      article.innerHTML = `
-        <div class="w-full aspect-[4/5] overflow-hidden">
-          <img
-            src="${cat.url_imagen ||
-        cat.imagen_url ||
-        cat.imagen ||
-        cat.foto ||
-        "https://via.placeholder.com/600x800?text=Categoria"
-        }"
-            alt="${cat.nombre}"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="bg-white text-center py-3 text-xs md:text-sm font-semibold tracking-wide text-gray-800">
-          ${cat.nombre.toUpperCase()}
-        </div>
-      `;
-
-      grid.appendChild(article);
-    });
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = `
-      <p class="col-span-full text-gray-600">
-        No se pudieron cargar las categorías.
-      </p>`;
-  }
-}
-
-
-// ================== INICIO ==================
-window.addEventListener("DOMContentLoaded", () => {
-  // aquí ya haces lo que tenías (saludo, user, etc.)
-  loadCategorias(); // 👈 asegúrate de llamarla
-});
 
 // ========== SLIDER DE PRODUCTOS DESDE LA BD ==========
 let productosSlider = [];
@@ -120,14 +57,21 @@ function renderProductoSlide() {
   const prod = productosSlider[prodIndex];
 
   const nombre = prod.nombre || "Producto destacado";
-  const desc = prod.descripcion || "Descubre esta pieza seleccionada especialmente para ti.";
+  const desc =
+    prod.descripcion ||
+    "Descubre esta pieza seleccionada especialmente para ti.";
   const imagen =
-    prod.imagen_url || prod.imagen || prod.foto || "https://via.placeholder.com/800x800?text=Producto";
+    prod.imagen_url ||
+    prod.url_imagen ||
+    prod.imagen ||
+    prod.foto ||
+    "https://via.placeholder.com/800x800?text=Producto";
 
   const precio =
     prod.precio != null ? `$${Number(prod.precio).toFixed(2)} MXN` : "";
 
-  const catNombre = prod.categoria_nombre || prod.categoria || "Selección Frices";
+  const catNombre =
+    prod.categoria_nombre || prod.categoria || "Selección Frices";
 
   const catEl = document.getElementById("prodCategoria");
   const nomEl = document.getElementById("prodNombre");
@@ -168,7 +112,6 @@ function renderProductoSlide() {
 
 function resetProdInterval() {
   if (prodInterval) clearInterval(prodInterval);
-
   if (!productosSlider.length) return;
 
   prodInterval = setInterval(() => {
@@ -227,14 +170,15 @@ async function loadProductosSlider() {
     if (agregarBtn) {
       agregarBtn.addEventListener("click", () => {
         const prod = productosSlider[prodIndex];
-        alert("Aquí agregarías al carrito el producto ID " + prod.id);
+        alert(
+          "Aquí podrías agregar al carrito el producto ID " + prod.id
+        );
       });
     }
   } catch (err) {
     console.error("Error cargando productos slider:", err);
   }
 }
-
 
 // ========== MENÚ DEL USUARIO (CLIENTE) ==========
 function initUserMenu() {
@@ -286,6 +230,7 @@ function initUserMenu() {
     window.location.href = "/static/cliente/cliente.html";
   });
 }
+
 // ================== FAVORITOS - CONTADOR NAVBAR ==================
 function getFavoritosLS() {
   try {
@@ -321,10 +266,10 @@ window.addEventListener("storage", (e) => {
   }
 });
 
-
 // ========== INIT AL CARGAR ==========
 document.addEventListener("DOMContentLoaded", () => {
-  loadCategorias();
+  // NO llamamos loadCategorias() para NO borrar tus tarjetas estáticas
+  // loadCategorias();
   loadProductosSlider();
   initUserMenu();
   updateFavCountBadge();
