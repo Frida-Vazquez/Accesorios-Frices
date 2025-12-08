@@ -340,7 +340,6 @@ function updateFavCountBadge() {
   }
 }
 
-
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {
   const badge = document.getElementById("cartCounter");
@@ -348,10 +347,8 @@ async function updateCartCounter() {
 
   const token = getClienteToken();
 
-  // Si no hay sesión, ocultar burbuja
   if (!token) {
-    badge.textContent = "";
-    badge.classList.add("hidden");
+    badge.textContent = "0";
     return;
   }
 
@@ -366,40 +363,18 @@ async function updateCartCounter() {
     if (!resp.ok) throw new Error("No se pudo obtener el carrito");
 
     const data = await resp.json();
-    console.log("🔍 Respuesta /carrito para navbar:", data);
+    const items = parseData(data);
 
-    // Intentar varias formas de extraer los ítems
-    let items = [];
-
-    if (Array.isArray(data)) {
-      items = data;
-    } else if (Array.isArray(data.data)) {
-      items = data.data;
-    } else if (Array.isArray(data.items)) {
-      items = data.items;
-    } else if (data.carrito && Array.isArray(data.carrito)) {
-      items = data.carrito;
-    } else {
-      items = parseData(data); // por si acaso
-    }
-
-    // sumamos cantidades
     let total = 0;
     items.forEach((item) => {
-      total += Number(item.cantidad || item.qty || 0);
+      total += Number(item.cantidad || 0);
     });
 
-    if (total > 0) {
-      badge.textContent = total;
-      badge.classList.remove("hidden");
-    } else {
-      badge.textContent = "";
-      badge.classList.add("hidden");
-    }
+    badge.textContent = total;
+
   } catch (err) {
     console.error("Error al actualizar contador de carrito:", err);
-    badge.textContent = "";
-    badge.classList.add("hidden");
+    badge.textContent = "0";
   }
 }
 
@@ -421,5 +396,4 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProductosSlider();
   initUserMenu();
   updateFavCountBadge();
-  updateCartCounter();
 });

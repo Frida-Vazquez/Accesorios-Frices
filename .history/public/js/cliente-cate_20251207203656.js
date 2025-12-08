@@ -13,7 +13,6 @@ function authHeader() {
 }
 
 async function agregarAlCarrito(productoId) {
-    // 1️⃣ SI NO HAY TOKEN → PEDIR LOGIN
     if (!getClienteToken()) {
         const ir = confirm(
             "Debes iniciar sesión para agregar productos al carrito.\n¿Quieres ir a la página de inicio de sesión?"
@@ -24,7 +23,6 @@ async function agregarAlCarrito(productoId) {
         return;
     }
 
-    // 2️⃣ SI HAY TOKEN → LLAMADA A LA API
     try {
         const resp = await fetch(`${API_URL}/carrito/agregar`, {
             method: "POST",
@@ -41,12 +39,13 @@ async function agregarAlCarrito(productoId) {
             throw new Error(data?.message || "No se pudo agregar al carrito.");
         }
 
-        // 3️⃣ ACTUALIZAR CONTADOR DEL NAVBAR
+        // 👉 **ACTUALIZAR CONTADOR DEL NAVBAR**
         if (window.updateCartCounter) {
-            window.updateCartCounter();
+            window.updateCartCounter(); // 🔥 IMPORTANTE
         }
 
         alert("Producto agregado al carrito 🛒");
+
     } catch (err) {
         console.error("Error agregando al carrito:", err);
         alert(err.message || "Ocurrió un error al agregar al carrito.");

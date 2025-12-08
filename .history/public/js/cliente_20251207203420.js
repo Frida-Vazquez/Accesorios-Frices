@@ -340,7 +340,7 @@ function updateFavCountBadge() {
   }
 }
 
-
+// ================== CARRITO - CONTADOR NAVBAR ==================
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {
   const badge = document.getElementById("cartCounter");
@@ -405,6 +405,8 @@ async function updateCartCounter() {
 
 // Hacerla accesible desde otros scripts
 window.updateCartCounter = updateCartCounter;
+
+
 
 
 // si cambian los favoritos desde otra pestaña, actualizamos también

@@ -158,10 +158,8 @@
                         "cliente_nombre",
                         data.user?.nombre || data.user?.email || email
                     );
-                    // 👇 que esté esto:
                     sessionStorage.setItem("frices_logged_in", "1");
                 }
-
 
                 const roles = Array.isArray(data.user?.roles) ? data.user.roles : [];
 

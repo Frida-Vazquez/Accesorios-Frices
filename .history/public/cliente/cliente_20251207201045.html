@@ -46,6 +46,13 @@
             <!-- DERECHA -->
             <div class="flex items-center gap-4 md:gap-5 text-lg relative">
 
+                <!-- BUSCADOR (placeholder) -->
+                <button
+                    class="hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#f3e2dd] transition"
+                    title="Buscar">
+                    🔍
+                </button>
+
                 <!-- PERFIL + HOLA NOMBRE -->
                 <button id="userMenuBtn"
                     class="flex items-center gap-1 text-sm md:text-base hover:text-[#8a555b] transition"
@@ -68,7 +75,7 @@
                     <span
                         class="absolute -top-2 -right-3 bg-orange-600 text-white text-[10px] px-2 py-[1px] rounded-full"
                         id="cartCounter">
-                        
+                        0
                     </span>
                 </a>
 
@@ -93,28 +100,28 @@
     </header>
 
     <!-- ============================ HERO ============================= -->
-    <section class="w-full text-white bg-cover bg-center min-h-[550px]"
+    <section class="w-full text-white bg-cover bg-center min-h-[600px] items-center"
         style="background-image: url('/static/assets/home.jpg');">
 
-        <!-- CAPA NEGRA + CENTRADO VERTICAL -->
-        <div class="w-full min-h-[550px] bg-black/40 flex items-center">
-            <!-- CONTENIDO CENTRADO COMO EN LA IMAGEN EJEMPLO -->
-            <div class="max-w-3xl mx-auto px-4 py-16 text-center flex flex-col items-center">
+        <!-- CAPA NEGRA AJUSTADA A LA MISMA ALTURA -->
+        <div class="w-full min-h-[600px] bg-black/40 items-center">
+            <div
+                class="max-w-6xl mx-auto px-4 py-16 md:py-20 flex flex-col items-center md:items-start text-center md:text-left">
 
                 <p class="text-xs md:text-sm mb-2 tracking-wide uppercase">
                     Joyería de acero inoxidable · Oro laminado · Chapa de oro
                 </p>
 
                 <h1 class="text-3xl md:text-5xl font-bold mb-4 leading-tight">
-                    Tu brillo comienza aquí ✨
+                    Tu brillo comienza aquí ✨<br class="hidden md:block">
                 </h1>
 
-                <p class="text-sm md:text-base mb-6 opacity-90">
+                <p class="text-sm md:text-base mb-6 opacity-90 max-w-xl">
                     Piezas pensadas para tu día a día: resistentes al agua, hipoalergénicas
                     y con un brillo que se mantiene.
                 </p>
 
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                     <a href="#categorias"
                         class="inline-block px-7 py-3 bg-white text-[#8a555b] rounded-full text-xs md:text-sm font-semibold shadow hover:bg-[#f2eaea] transition">
                         Ver categorías
@@ -128,7 +135,6 @@
             </div>
         </div>
     </section>
-
 
     <!-- ============================ CONTENIDO PRINCIPAL ============================= -->
     <main class="max-w-6xl mx-auto px-4 py-10 md:py-12 space-y-14">

@@ -22,12 +22,6 @@ function getClienteNombre() {
   return localStorage.getItem(CLIENTE_NOMBRE_KEY);
 }
 
-function authHeader() {
-  const token = getClienteToken();
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
-
 function clearClienteSession() {
   localStorage.removeItem(CLIENTE_TOKEN_KEY);
   localStorage.removeItem(CLIENTE_NOMBRE_KEY);
@@ -312,6 +306,7 @@ function initUserMenu() {
 }
 
 
+
 // ================== FAVORITOS - CONTADOR NAVBAR ==================
 function getFavoritosLS() {
   try {
@@ -340,73 +335,6 @@ function updateFavCountBadge() {
   }
 }
 
-
-// ================== CARRITO - CONTADOR NAVBAR ==================
-async function updateCartCounter() {
-  const badge = document.getElementById("cartCounter");
-  if (!badge) return;
-
-  const token = getClienteToken();
-
-  // Si no hay sesión, ocultar burbuja
-  if (!token) {
-    badge.textContent = "";
-    badge.classList.add("hidden");
-    return;
-  }
-
-  try {
-    const resp = await fetch(`${API_URL}/carrito`, {
-      headers: {
-        "Content-Type": "application/json",
-        ...authHeader(),
-      },
-    });
-
-    if (!resp.ok) throw new Error("No se pudo obtener el carrito");
-
-    const data = await resp.json();
-    console.log("🔍 Respuesta /carrito para navbar:", data);
-
-    // Intentar varias formas de extraer los ítems
-    let items = [];
-
-    if (Array.isArray(data)) {
-      items = data;
-    } else if (Array.isArray(data.data)) {
-      items = data.data;
-    } else if (Array.isArray(data.items)) {
-      items = data.items;
-    } else if (data.carrito && Array.isArray(data.carrito)) {
-      items = data.carrito;
-    } else {
-      items = parseData(data); // por si acaso
-    }
-
-    // sumamos cantidades
-    let total = 0;
-    items.forEach((item) => {
-      total += Number(item.cantidad || item.qty || 0);
-    });
-
-    if (total > 0) {
-      badge.textContent = total;
-      badge.classList.remove("hidden");
-    } else {
-      badge.textContent = "";
-      badge.classList.add("hidden");
-    }
-  } catch (err) {
-    console.error("Error al actualizar contador de carrito:", err);
-    badge.textContent = "";
-    badge.classList.add("hidden");
-  }
-}
-
-// Hacerla accesible desde otros scripts
-window.updateCartCounter = updateCartCounter;
-
-
 // si cambian los favoritos desde otra pestaña, actualizamos también
 window.addEventListener("storage", (e) => {
   if (e.key === "frices_favoritos") {
@@ -421,5 +349,4 @@ document.addEventListener("DOMContentLoaded", () => {
   loadProductosSlider();
   initUserMenu();
   updateFavCountBadge();
-  updateCartCounter();
 });

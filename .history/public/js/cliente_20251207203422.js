@@ -340,7 +340,7 @@ function updateFavCountBadge() {
   }
 }
 
-
+// ================== CARRITO - CONTADOR NAVBAR ==================
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {
   const badge = document.getElementById("cartCounter");

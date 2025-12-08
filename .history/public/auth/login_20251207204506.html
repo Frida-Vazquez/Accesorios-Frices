@@ -152,15 +152,15 @@
                 // GUARDAR TOKEN Y NOMBRE
                 // =========================
                 if (data.token) {
-                    localStorage.setItem("frices_token", data.token);
-                    localStorage.setItem("cliente_token", data.token);
-                    localStorage.setItem(
-                        "cliente_nombre",
-                        data.user?.nombre || data.user?.email || email
-                    );
-                    // 👇 que esté esto:
-                    sessionStorage.setItem("frices_logged_in", "1");
-                }
+    localStorage.setItem("frices_token", data.token);
+    localStorage.setItem("cliente_token", data.token);
+    localStorage.setItem(
+        "cliente_nombre",
+        data.user?.nombre || data.user?.email || email
+    );
+    // 👇 que esté esto:
+    sessionStorage.setItem("frices_logged_in", "1");
+}
 
 
                 const roles = Array.isArray(data.user?.roles) ? data.user.roles : [];

@@ -340,7 +340,7 @@ function updateFavCountBadge() {
   }
 }
 
-
+// ================== CARRITO - CONTADOR NAVBAR ==================
 // ================== CARRITO - CONTADOR NAVBAR ==================
 async function updateCartCounter() {
   const badge = document.getElementById("cartCounter");
@@ -366,27 +366,11 @@ async function updateCartCounter() {
     if (!resp.ok) throw new Error("No se pudo obtener el carrito");
 
     const data = await resp.json();
-    console.log("🔍 Respuesta /carrito para navbar:", data);
+    const items = parseData(data);
 
-    // Intentar varias formas de extraer los ítems
-    let items = [];
-
-    if (Array.isArray(data)) {
-      items = data;
-    } else if (Array.isArray(data.data)) {
-      items = data.data;
-    } else if (Array.isArray(data.items)) {
-      items = data.items;
-    } else if (data.carrito && Array.isArray(data.carrito)) {
-      items = data.carrito;
-    } else {
-      items = parseData(data); // por si acaso
-    }
-
-    // sumamos cantidades
     let total = 0;
     items.forEach((item) => {
-      total += Number(item.cantidad || item.qty || 0);
+      total += Number(item.cantidad || 0);
     });
 
     if (total > 0) {
@@ -402,6 +386,10 @@ async function updateCartCounter() {
     badge.classList.add("hidden");
   }
 }
+
+// Para poder usarla desde otros JS
+window.updateCartCounter = updateCartCounter;
+
 
 // Hacerla accesible desde otros scripts
 window.updateCartCounter = updateCartCounter;
