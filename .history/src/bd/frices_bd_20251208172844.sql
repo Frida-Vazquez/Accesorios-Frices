@@ -341,40 +341,4 @@ SELECT * FROM roles;
 SELECT * FROM categorias;
 SELECT * FROM productos;
 SELECT * FROM carritos;
-SELECT * FROM direcciones;
 
-SELECT user, host, plugin
-FROM mysql.user;
-
-
-CREATE TABLE IF NOT EXISTS direcciones_envio (
-  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  pedido_id BIGINT UNSIGNED NOT NULL,
-  cliente_id BIGINT UNSIGNED NOT NULL,
-  nombre VARCHAR(100) NOT NULL,
-  telefono VARCHAR(20) NOT NULL,
-  calle VARCHAR(255) NOT NULL,
-  colonia VARCHAR(255) NOT NULL,
-  ciudad VARCHAR(100) NOT NULL,
-  estado VARCHAR(100) NOT NULL,
-  cp VARCHAR(10) NOT NULL,
-  referencias TEXT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-              ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id),
-
-  CONSTRAINT fk_dir_envio_pedido
-    FOREIGN KEY (pedido_id)
-    REFERENCES pedidos (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-
-  CONSTRAINT fk_dir_envio_cliente
-    FOREIGN KEY (cliente_id)
-    REFERENCES clientes (id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-) ENGINE=InnoDB
-  DEFAULT CHARSET=utf8mb4
-  COLLATE=utf8mb4_general_ci;

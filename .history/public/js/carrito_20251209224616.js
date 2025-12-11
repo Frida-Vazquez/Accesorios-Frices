@@ -212,42 +212,15 @@ async function vaciarCarrito() {
   }
 }
 
-// 🔹 FINALIZAR COMPRA: manda también la dirección (direEnvi)
-// 🔹 FINALIZAR COMPRA: lee y valida la dirección directamente
+// 🔹 NUEVO: finalizar compra llamando a POST /api/pedidos
 async function checkout() {
+  // aseguramos que esté logueado
   if (!getClienteToken()) {
     alert("Debes iniciar sesión para finalizar la compra.");
     window.location.href = "/static/auth/login.html";
     return;
   }
 
-  // 1) Leer campos de dirección del formulario
-  const direEnvi = {
-    nombre: document.getElementById("dir_nombre")?.value.trim() || "",
-    telefono: document.getElementById("dir_telefono")?.value.trim() || "",
-    calle: document.getElementById("dir_calle")?.value.trim() || "",
-    colonia: document.getElementById("dir_colonia")?.value.trim() || "",
-    ciudad: document.getElementById("dir_ciudad")?.value.trim() || "",
-    estado: document.getElementById("dir_estado")?.value.trim() || "",
-    cp: document.getElementById("dir_cp")?.value.trim() || "",
-    referencias: document.getElementById("dir_referencias")?.value.trim() || "",
-  };
-
-  // 2) Validación básica
-  if (
-    !direEnvi.nombre ||
-    !direEnvi.telefono ||
-    !direEnvi.calle ||
-    !direEnvi.colonia ||
-    !direEnvi.ciudad ||
-    !direEnvi.estado ||
-    !direEnvi.cp
-  ) {
-    alert("Por favor completa todos los campos obligatorios de la dirección.");
-    return;
-  }
-
-  // 3) Mandar la dirección al backend junto con el pedido
   try {
     const resp = await fetch(`${API_URL}/pedidos`, {
       method: "POST",
@@ -255,7 +228,7 @@ async function checkout() {
         "Content-Type": "application/json",
         ...authHeader(),
       },
-      body: JSON.stringify({ direEnvi }), // 👈 aquí viaja la dirección
+      body: JSON.stringify({}), // el backend usa el carrito del cliente
     });
 
     const data = await resp.json();
@@ -270,14 +243,13 @@ async function checkout() {
       ).toFixed(2)} MXN`
     );
 
-    await cargarCarrito(); // el carrito se vacía visualmente
+    // recargar info del carrito (ya debe venir vacío)
+    await cargarCarrito();
   } catch (err) {
     console.error("Error en checkout:", err);
     alert("No se pudo completar la compra.");
   }
 }
-
-
 
 // Botones principales
 if (btnVaciar) {

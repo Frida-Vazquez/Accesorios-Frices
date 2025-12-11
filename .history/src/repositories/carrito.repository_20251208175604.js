@@ -118,55 +118,6 @@ export const carritoRepository = {
     };
   },
 
-  // ================== NUEVO: obtener carrito con items (para pedidos) ==================
-  async obtenerCarritoConItems(clienteId) {
-    const [carritos] = await pool.query(
-      `SELECT id
-       FROM carritos
-       WHERE cliente_id = ? AND estado = 'ACTIVO'
-       LIMIT 1`,
-      [clienteId]
-    );
-
-    if (!carritos.length) {
-      return null; // no hay carrito activo
-    }
-
-    const carritoId = carritos[0].id;
-
-    const [items] = await pool.query(
-      `SELECT
-         producto_id,
-         cantidad,
-         precio_unitario,
-         (cantidad * precio_unitario) AS subtotal
-       FROM carrito_items
-       WHERE carrito_id = ?`,
-      [carritoId]
-    );
-
-    return {
-      id: carritoId,
-      items,
-    };
-  },
-
-  // ================== NUEVO: marcar carrito como completado y vaciarlo ==================
-  async completarCarrito(carritoId) {
-    await pool.query(
-      `UPDATE carritos
-       SET estado = 'COMPLETADO', updated_at = NOW()
-       WHERE id = ?`,
-      [carritoId]
-    );
-
-    await pool.query(
-      `DELETE FROM carrito_items
-       WHERE carrito_id = ?`,
-      [carritoId]
-    );
-  },
-
   // ================== CHECKOUT: crear pedido desde carrito ==================
   async checkoutDesdeCarritoActivo(clienteId) {
     const conn = await pool.getConnection();

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Pedidos - Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- NAVBAR -->
+  <header class="bg-[#8a555b] text-white">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="/static/admin/admin.html" class="underline text-sm">← Volver</a>
+      <h1 class="text-lg font-semibold">Pedidos</h1>
+      <button id="btnLogout" class="px-3 py-1 rounded bg-white/10 text-sm hover:bg-white/20">
+        Cerrar sesión
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <p id="adminMessage" class="mb-4 text-sm"></p>
+
+    <div class="bg-white rounded shadow p-4 overflow-x-auto">
+      <table class="min-w-full text-sm">
+        <thead>
+          <tr class="border-b">
+            <th class="text-left py-2 px-2">ID</th>
+            <th class="text-left py-2 px-2">Fecha</th>
+            <th class="text-left py-2 px-2">Cliente</th>
+            <th class="text-left py-2 px-2">Email</th>
+            <th class="text-left py-2 px-2">Estado</th>
+            <th class="text-left py-2 px-2">Total</th>
+          </tr>
+        </thead>
+        <tbody id="tablaPedidos">
+          <!-- Se llena automáticamente -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="/static/js/pedidos.js"></script>
+</body>
+
+</html>

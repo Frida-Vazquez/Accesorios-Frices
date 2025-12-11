@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Dirección de envío</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#f5eee7] text-gray-900 min-h-screen">
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-xl font-semibold mb-4">Dirección de envío</h1>
+
+    <!-- 🔹 ESTA SECCIÓN ES LA IMPORTANTE -->
+    <section id="bloqueDireEnvi" class="bg-white rounded-2xl shadow p-4 space-y-3">
+      <p class="text-sm text-gray-700">
+        Completa tus datos de envío para recibir tus accesorios Accesorios Frices 💎
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-3 text-sm">
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium" for="dir_nombre">Nombre completo</label>
+          <input id="dir_nombre" type="text"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. Frida Vázquez" />
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium" for="dir_telefono">Teléfono</label>
+          <input id="dir_telefono" type="tel"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. 477..." />
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium" for="dir_cp">Código postal</label>
+          <input id="dir_cp" type="text"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. 37000" />
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium" for="dir_calle">Calle y número</label>
+          <input id="dir_calle" type="text"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. Calle Luna #123 Int. 4" />
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium" for="dir_colonia">Colonia</label>
+          <input id="dir_colonia" type="text"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. Centro" />
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium" for="dir_ciudad">Ciudad</label>
+          <input id="dir_ciudad" type="text"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. León" />
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium" for="dir_estado">Estado</label>
+          <input id="dir_estado" type="text"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Ej. Guanajuato" />
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block mb-1 font-medium" for="dir_referencias">Referencias (opcional)</label>
+          <textarea id="dir_referencias" rows="3"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#8a555b]"
+            placeholder="Color de la casa, puntos de referencia, etc."></textarea>
+        </div>
+      </div>
+
+      <p id="dir_error" class="text-xs text-red-600 hidden mt-1"></p>
+    </section>
+  </main>
+
+  <!-- Si quieres usar este form junto con el carrito, puedes cargar este JS también -->
+  <script src="/static/js/direEnvi.js"></script>
+</body>
+
+</html>

@@ -6,7 +6,7 @@ import clientesRouter from "./clientes.routes.js";
 import categoriasRouter from "./categorias.routes.js";
 import productosRouter from "./productos.routes.js";
 import productosRoutes from "./productos.routes.js";
-import carritoRouter from "./carrito.routes.js";
+import carritoRouter from "./carrito.routes.js";  // 👈 NUEVO
 import pedidoRouter from "./pedido.routes.js"; // 👈 NUEVO
 
 const router = Router();
@@ -18,12 +18,9 @@ router.use("/auth", authRouter);
 router.use("/clientes", clientesRouter);
 router.use("/categorias", categoriasRouter);
 router.use("/productos", productosRouter);
-router.use("/productos", productosRoutes); // esto está duplicado, pero si te da cosa quitarlo, lo dejamos así por ahora 😅
+router.use("/productos", productosRoutes);
 
-// carrito
+// carrito 👇
 router.use("/carrito", carritoRouter);
-
-// pedidos 👇
-router.use("/pedidos", pedidoRouter);
 
 export default router;
